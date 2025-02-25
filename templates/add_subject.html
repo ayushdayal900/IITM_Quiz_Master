@@ -1,0 +1,23 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritamce -->
+{% block content %}
+
+            <div class="center"><h3>Add Subject</h3></div>
+            <form action="/add_subject" method="POST">
+                <div class="input_form">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Subject Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="./add_subject.html" type="button" class="btn btn-primary">Cancle</a>
+                </div>
+            </form>
+{% endblock%}   

@@ -7,34 +7,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Admin Dashboard</title>
 </head>
-<body>
+<body class="body">
     <div class="my_container">
-        <div class="center"><h1>Welcome {{name}}</h1></div>
         <div class="my_panel">
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #1daccf; height: 60px;">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">Navbar</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin_summary">Summary</a>
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin_summary">Summary</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="/login">Logout</a>
-                        </li>
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
                         <li class="nav-item dropdown">
                         </li>
                     </ul>
                 </div>
                 <form class="d-flex" action="/search/{{name}}" method="POST">
-
+                    
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_txt" id="search_txt">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-                </div>
+            </div>
             </nav>
 
             {% block content %}

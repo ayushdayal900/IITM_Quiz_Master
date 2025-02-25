@@ -2,20 +2,15 @@
     margin: 10px;
 }
 
-.my_container{
-    border: 2px solid black;
-}
 
-.my_panel{
-    width: 80%;
-    height: auto;
-    width: auto;
-    border: 1px dashed black;
-}
 
 .input_form{
     border: 1px solid blue;
+    background-color: rgb(214, 230, 229, 0.3);
     width: 600px;
+
+    font-weight: bold;
+    color: rgb(255, 188, 63);
     height: 600px;
     margin: auto;
     margin-top: 20px;
@@ -23,6 +18,8 @@
     border-radius: 10px;
     font-size: 16px;
     text-align: justify;
+    /* height: auto; */
+    /* width: auto; */
 }
 
 .outer_box{
@@ -31,10 +28,12 @@
     padding: 10px;
     border-radius: 10px;
     margin-top: 10px; 
+    
 }
 
 .center{
     text-align: center;
+    /* justify-content: center; */
     margin: auto;
     color: rgb(5,5,110);
 }
@@ -43,3 +42,20 @@
     margin: auto;
     color: maroon;
 }
+
+.body{
+    background-image: url('./images/bg_app_1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 70vh;
+    width: 100%;    
+}
+
+.card{
+    height: 100px;
+    width: 500px;
+
+}
+
+

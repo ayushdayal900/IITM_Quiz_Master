@@ -17,6 +17,10 @@ user = Blueprint('user', __name__)
 def home():
     return render_template('index.html')
 
+@gen.route('/logout')
+def logout():
+    return render_template('login.html')
+
 
 
 @gen.route('/login', methods=["GET","POST"])
@@ -67,7 +71,48 @@ def signup():
 # admin routes
 @admin.route('/admin_dashboard')
 def admin_dashboard():
-    return render_template('admin_dashboard.html')
+    subs = Subject.query.all()
+    return render_template('admin_dashboard.html', subs = subs, )
+
+
+@admin.route('/summary')
+def summary():
+    return render_template('summary.html')
+
+
+
+@admin.route('/add_subject', methods=["POST", "GET"])
+def add_subject():
+    if request.method == "POST":
+        name = request.form.get('name')
+        description = request.form.get('description')
+        
+        sub = Subject(name = name, description = description)
+
+        db.session.add(sub)
+        db.session.commit()
+
+        
+        return redirect(url_for("admin.admin_dashboard"))
+    return render_template('add_subject.html')
+
+
+
+
+@admin.route('/add_chapter', methods=["POST", "GET"])
+def add_chapter():
+    if request.method == "POST":
+        name = request.form.get('name')
+        description = request.form.get('description')
+        
+        chap = Chapter(name = name, description = description)
+
+        db.session.add(chap)
+        db.session.commit()
+
+        
+        return redirect(url_for("admin.admin_dashboard"))
+    return render_template('add_chapter.html')
 
 
 
@@ -84,5 +129,11 @@ def user_dashboard():
 # database routes
 @dB.route('/users')
 def users():
+    user = User_Info.query.all()
+    return render_template('user_dashboard.html', users = user)
+
+
+@dB.route('/search')
+def search():
     user = User_Info.query.all()
     return render_template('user_dashboard.html', users = user)

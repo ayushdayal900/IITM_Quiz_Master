@@ -1,0 +1,28 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritamce -->
+{% block content %}
+
+            <div class="center"><h3>Add Chapter</h3></div>
+            <form action="/add_chapter" method="POST">
+                <div class="input_form">
+
+                    <div class="mb-3">
+                        <label for="id" class="form-label">{{sub.id}}</label>
+                        <input type="number" class="form-control" name="id" id="id" placeholder="Subject id" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Chapter Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Chapter Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="./add_subject.html" type="button" class="btn btn-primary">Cancle</a>
+                </div>
+            </form>
+{% endblock%}   
