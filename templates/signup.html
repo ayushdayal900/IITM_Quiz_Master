@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Login</title>
+</head>
+<body>
+    <div class="my_container">
+        <div class="center"><h1>Heyyy New Comer....</h1></div>
+        <div class="my_panel">
+            <div class="center"><h3>Sign Up</h3></div>
+            <form action="/signup" method="POST">
+                <div class="input_form">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="iitm@study.iitm.ac.in">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="full_name" id="full_name" placeholder="Jhon Doe">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="qualification" class="form-label">Qualification</label>
+                        <input type="text" class="form-control" name="qualification" id="qualification" placeholder="10">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date Of Birth</label>
+                        <input type="date" class="form-control" name="date" id="date" placeholder="yyyy-mm-dd">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    Already have and Account?<a href="/login">Login</a>
+                    <div class="err_msg">{{msg}}</div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

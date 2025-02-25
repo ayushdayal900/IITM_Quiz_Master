@@ -1,0 +1,10 @@
+{% extends "user_layout.html" %}
+
+{% block content %}
+    <h1>User Dashboard</h1> 
+    <ul>
+        {% for u in users %}
+            <li>{{ u.full_name }} - {{ u.email }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
