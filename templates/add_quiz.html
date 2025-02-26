@@ -1,0 +1,50 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritance -->
+{% block content %}
+
+<div class="center"><h3>Add Quiz</h3></div>
+<form action="{{ url_for('admin.add_quiz') }}" method="POST">
+    <div class="input_form">
+
+        <div class="mb-3">
+            <label for="user_id" class="form-label">User ID</label>
+            <input type="number" class="form-control" name="user_id" id="user_id" placeholder="Enter User ID" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="subject_id" class="form-label">Subject ID</label>
+            <input type="number" class="form-control" name="subject_id" id="subject_id" placeholder="Enter Subject ID" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="chapter_id" class="form-label">Chapter ID</label>
+            <input type="number" class="form-control" name="chapter_id" id="chapter_id" placeholder="Enter Chapter ID" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="question_id" class="form-label">Question ID</label>
+            <input type="number" class="form-control" name="question_id" id="question_id" placeholder="Enter Question ID" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="datetime" class="form-label">Date - Time</label>
+            <input type="datetime-local" class="form-control" name="datetime" id="datetime" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input type="number" class="form-control" name="duration" id="duration" placeholder="Enter Duration" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="score" class="form-label">Score</label>
+            <input type="number" class="form-control" name="score" id="score" placeholder="Enter Score" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{ url_for('admin.quiz') }}" class="btn btn-secondary">Cancel</a>
+
+    </div>
+</form>
+
+{% endblock %}

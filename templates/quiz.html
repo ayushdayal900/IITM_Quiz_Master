@@ -1,0 +1,27 @@
+{% extends "admin_layout.html" %}  
+{% block content %}
+
+    {% for quiz in quizes %}
+    
+    <h1>{{quiz.name}}</h1>
+    <div class="card">
+        <th>Quiz{{quiz.id}}-{{quiz.chapter_id}}</th>
+        <table border="3px">
+
+            <th>Id</th>
+            <th>Question Title</th>
+            <th>Action</th>
+            
+            <tr>
+                <td>{{quiz.question.id}}</td>
+                <td>{{quiz.question.name}}</td>
+                <!-- action -->
+            </tr>
+            
+        </table>
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('admin.add_quiz') }}"> <button type="button" class="btn btn-outline-success">+ Quiz</button> </a>
+
+{% endblock %}

@@ -18,14 +18,14 @@
             {% endfor %}
             
         </table>
-        <a href="/add_chapter"> <button type="button" class="btn btn-outline-success">+ Add Chapter</button> </a>
+        <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"> <button type="button" class="btn btn-outline-success">+ Add Chapter</button> </a>
     </div>
 
     
     {% endfor %}
 
 
-    <a href="/add_subject"> <button type="button" class="btn btn-outline-success">+ Add</button> </a>
+    <a href="{{ url_for('admin.add_subject') }}"> <button type="button" class="btn btn-outline-success">+ Add</button> </a>
 
 
 

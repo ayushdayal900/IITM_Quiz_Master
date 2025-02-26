@@ -44,7 +44,7 @@ class Question(db.Model):
     description = db.Column(db.String, nullable=False)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
 
-    quizs = db.relationship("Quiz", cascade="all,delete", backref="question", lazy=True)
+    # quizs = db.relationship("Quiz", cascade="all,delete", backref="question", lazy=True)
 
 
 class Quiz(db.Model):
@@ -54,8 +54,11 @@ class Quiz(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
+
     date_time = db.Column(db.DateTime, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     score = db.Column(db.Integer, nullable=False)
 
-    subject = db.relationship("Subject", backref="quiz")
+    # subject = db.relationship("Subject", backref="quiz")
+    # chapter = db.relationship("Chapter", backref="quiz")
+    question = db.relationship("Question", backref="quiz")

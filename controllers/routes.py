@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, redirect, render_template, request, url_for
-from models.models import db, User_Info, Subject, Chapter, Question
+from models.models import Quiz, db, User_Info, Subject, Chapter, Question
 # from models import db
 
 
@@ -72,12 +72,18 @@ def signup():
 @admin.route('/admin_dashboard')
 def admin_dashboard():
     subs = Subject.query.all()
-    return render_template('admin_dashboard.html', subs = subs, )
+    return render_template('admin_dashboard.html', subs = subs)
 
 
 @admin.route('/summary')
 def summary():
     return render_template('summary.html')
+
+
+@admin.route('/quiz')
+def quiz():
+    quizes = Quiz.query.all()
+    return render_template('quiz.html', quizes = quizes)
 
 
 
@@ -99,21 +105,43 @@ def add_subject():
 
 
 
-@admin.route('/add_chapter', methods=["POST", "GET"])
-def add_chapter():
+@admin.route('/add_chapter/<sid>', methods=["POST", "GET"])
+def add_chapter(sid):
     if request.method == "POST":
         name = request.form.get('name')
         description = request.form.get('description')
         
-        chap = Chapter(name = name, description = description)
+        chap = Chapter(name = name, description = description, subject_id = sid)
 
         db.session.add(chap)
         db.session.commit()
 
-        
         return redirect(url_for("admin.admin_dashboard"))
-    return render_template('add_chapter.html')
+    return render_template('add_chapter.html',sid=sid)
 
+
+
+@admin.route('/add_quiz', methods=["POST", "GET"])
+def add_quiz():
+    if request.method == "POST":
+        user_id = request.form.get("user_id")  
+        subject_id = request.form.get("subject_id")  
+        chapter_id = request.form.get("chapter_id")  
+        question_id = request.form.get("question_id")  
+
+        datetime_str = request.form.get("datetime")
+        date_time = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M")
+
+        duration = request.form.get("duration")
+        score = request.form.get("score")
+
+        quiz = Quiz(user_id=user_id,subject_id=subject_id,chapter_id=chapter_id,question_id=question_id,date_time=date_time,duration=duration,score=score)
+        
+        db.session.add(quiz)
+        db.session.commit()
+
+        return redirect(url_for("admin.quiz"))
+    return render_template('add_quiz.html')
 
 
 
