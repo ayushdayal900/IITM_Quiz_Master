@@ -12,10 +12,14 @@ user = Blueprint('user', __name__)
 
 
 
+
+
 # general routes
 @gen.route('/')
 def home():
     return render_template('index.html')
+
+
 
 @gen.route('/logout')
 def logout():
@@ -68,6 +72,17 @@ def signup():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 # admin routes
 @admin.route('/admin_dashboard')
 def admin_dashboard():
@@ -82,8 +97,19 @@ def summary():
 
 @admin.route('/quiz')
 def quiz():
-    quizes = Quiz.query.all()
-    return render_template('quiz.html', quizes = quizes)
+    quizes = Quiz.query.all() 
+    ques = Question.query.all()
+    return render_template('quiz.html',quizes = quizes, ques=ques)
+
+
+
+
+@admin.route('/quiz_details/<qzid>')
+def quiz_details(qzid):
+    quiz = Quiz.query.filter_by(id=qzid).first() 
+    return render_template('quiz_details.html',quiz = quiz)
+
+
 
 
 
@@ -125,9 +151,7 @@ def add_chapter(sid):
 def add_quiz():
     if request.method == "POST":
         user_id = request.form.get("user_id")  
-        subject_id = request.form.get("subject_id")  
         chapter_id = request.form.get("chapter_id")  
-        question_id = request.form.get("question_id")  
 
         datetime_str = request.form.get("datetime")
         date_time = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M")
@@ -135,7 +159,7 @@ def add_quiz():
         duration = request.form.get("duration")
         score = request.form.get("score")
 
-        quiz = Quiz(user_id=user_id,subject_id=subject_id,chapter_id=chapter_id,question_id=question_id,date_time=date_time,duration=duration,score=score)
+        quiz = Quiz(user_id=user_id,chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
         
         db.session.add(quiz)
         db.session.commit()
@@ -145,10 +169,59 @@ def add_quiz():
 
 
 
+
+
+@admin.route('/add_question/<cid>/<qid>', methods=["POST", "GET"])
+def add_question(cid,qid):
+
+    chaps = Chapter.query.filter_by(id=cid).first()
+    print(chaps)
+
+    if request.method == "POST":
+        chapter_id = request.form.get('cid')
+        quiz_id = request.form.get('qid')
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        option1 = request.form.get('option1')
+        option2 = request.form.get('option2')
+        option3 = request.form.get('option3')
+        option4 = request.form.get('option4')
+        correct_option = request.form.get('correct_option')
+
+        
+        que = Question(name = name, description = description, chapter_id = chapter_id, quiz_id=quiz_id, option1=option1, option2=option2, option3=option3, option4=option4, correct_option=correct_option)
+
+        db.session.add(que)
+        db.session.commit()
+
+        return redirect(url_for("admin.quiz"))
+    return render_template('add_question.html',cid = cid,qid = qid,chaps = chaps)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # user routes
 @user.route('/user_dashboard')
 def user_dashboard():
     return render_template('user_dashboard.html')
+
+
+
+
+
+
 
 
 

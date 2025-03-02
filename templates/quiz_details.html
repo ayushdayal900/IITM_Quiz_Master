@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Login</title>
+</head>
+<body class="body">
+    <div class="center"><h3>Add Quiz</h3></div>
+<form action="{{ url_for('admin.quiz_details', qzid = quiz.id) }}" method="POST">
+
+    <div class="input_form">
+
+        <div class="mb-3">
+            <label for="chapter_id" class="form-label">Chapter </label>
+            <input type="number" class="form-control" name="chapter_id" id="chapter_id" placeholder="{{quiz.chapter.name}}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="datetime" class="form-label">Date - Time</label>
+            <input type="datetime" class="form-control" name="datetime" id="datetime" placeholder="{{quiz.date_time}}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="duration" class="form-label">Duration</label>
+            <input type="number" class="form-control" name="duration" id="duration" placeholder="{{quiz.duration}}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="score" class="form-label">Score</label>
+            <input type="number" class="form-control" name="score" id="score" placeholder="{{quiz.score}}" readonly>
+        </div>
+
+        <!-- <button class="btn btn-primary">Back</button> -->
+        <a href="{{ url_for('admin.quiz') }}" class="btn btn-secondary">Back</a>
+
+    </div>
+</form>
+</div>
+</body>
+</html>

@@ -1,32 +1,76 @@
 {% extends "admin_layout.html" %}  
 {% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 text-primary mb-0">Subjects</h1>
+      <!-- <a href="{{ url_for('admin.add_subject') }}" class="btn btn-warning rounded-square"> + </a> -->
 
+      <a href="{{ url_for('admin.add_subject') }}" class="btn btn-success rounded-square">
+        <i class="fas fa-plus-circle me-2"></i> Add New Subject
+      </a>
+
+
+  </div>
+  
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
     {% for sub in subs %}
-    
-    <h1>{{sub.name}}</h1>
-    <div class="card">
-        <table border="3px">
-            <th>Chapter Name</th>
-            <th>No of questions</th>
-            <th>Action</th>
-            
-            {% for chap in sub.chaps %}
-            <tr>
-                <td>{{chap.name}}</td>
-                <td>{{chap.description}}</td>
-            </tr>
-            {% endfor %}
-            
-        </table>
-        <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"> <button type="button" class="btn btn-outline-success">+ Add Chapter</button> </a>
+    <div class="col">
+      <div class="card border rounded-3 h-100">
+        <div class="card-header bg-white border-bottom py-2">
+          <h5 class="card-title text-center fw-bold mb-0">{{ sub.name }}</h5>
+        </div>
+        
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th class="text-primary">Chapter name</th>
+                  <th class="text-primary">No of questions</th>
+                  <th class="text-primary">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if sub.chaps %}
+                  {% for chap in sub.chaps %}
+                  <tr>
+                    <td>{{ chap.name }}</td>
+                    <td>{{ chap.ques }}</td>
+                    <td>
+                      <div class="d-flex">
+                        <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
+                        <span class="mx-1">/</span>
+                        <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                {% else %}
+                  <tr>
+                    <td colspan="3" class="text-center py-3 text-muted">No chapters available</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="card-footer bg-white border-top p-2 text-end">
+          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}" class="btn btn-sm btn-danger">
+            + Chapter
+          </a>
+        </div>
+      </div>
     </div>
-
-    
     {% endfor %}
-
-
-    <a href="{{ url_for('admin.add_subject') }}"> <button type="button" class="btn btn-outline-success">+ Add</button> </a>
-
-
-
+  </div>
+  
+  {% if not subs %}
+  <div class="text-center p-5 bg-light rounded-3 mt-4">
+    <h3 class="text-primary">All subjects here...</h3>
+    <p class="text-muted">Get started by adding your first subject.</p>
+  </div>
+  {% else %}
+  {% endif %}
+</div>
 {% endblock %}

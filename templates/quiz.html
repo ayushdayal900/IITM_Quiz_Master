@@ -1,27 +1,69 @@
-{% extends "admin_layout.html" %}  
+{% extends "admin_layout.html" %}
 {% block content %}
-
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 text-primary mb-0">Quizzes</h1>
+    <a href="{{ url_for('admin.add_quiz') }}" class="btn btn-success rounded-square">
+      <i class="fas fa-plus-circle me-2"></i> Add New Quiz
+    </a>
+  </div>
+  
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
     {% for quiz in quizes %}
-    
-    <h1>{{quiz.name}}</h1>
-    <div class="card">
-        <th>Quiz{{quiz.id}}-{{quiz.chapter_id}}</th>
-        <table border="3px">
-
-            <th>Id</th>
-            <th>Question Title</th>
-            <th>Action</th>
-            
-            <tr>
-                <td>{{quiz.question.id}}</td>
-                <td>{{quiz.question.name}}</td>
-                <!-- action -->
-            </tr>
-            
-        </table>
+    <div class="col">
+      <div class="card border rounded-3 h-100">
+        <!-- Card Header -->
+        <div class="card-header bg-white border-bottom py-2">
+          <h5 class="card-title text-center fw-bold mb-0">{{ quiz.name }}</h5>
+          <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}"> <div class="text-center text-muted small">Quiz({{quiz.id}}): {{ quiz.chapter.name }}</div></a>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body p-0">
+          {% if quiz.questions %}
+          <div class="table-responsive">
+            <table class="table table-hover table-sm mb-0">
+              <thead class="bg-light">
+                <tr>
+                  <th class="text-primary">Question Id</th>
+                  <th class="text-primary">Question Name</th>
+                  <th class="text-primary">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for que in quiz.questions %}
+                <tr>
+                  <td>{{ que.id }}</td>
+                  <td>{{ que.name }}</td>
+                  <td>{{ que.description }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="p-3 text-center text-muted">
+            <i class="fas fa-info-circle me-2"></i> No questions added yet.
+          </div>
+          {% endif %}
+        </div>
+        
+        <!-- Card Footer -->
+        <div class="card-footer bg-white border-top p-2 text-end">
+          <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="btn btn-sm btn-primary">
+            <i class="fas fa-plus me-1"></i> Add Question
+          </a>
+        </div>
+      </div>
     </div>
     {% endfor %}
-
-    <a href="{{ url_for('admin.add_quiz') }}"> <button type="button" class="btn btn-outline-success">+ Quiz</button> </a>
-
+  </div>
+  
+  {% if not quizes %}
+  <div class="text-center p-5 bg-light rounded-3 mt-4">
+    <h3 class="text-primary">No Quizzes Available</h3>
+    <p class="text-muted">Get started by creating your first quiz.</p>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
