@@ -166,7 +166,12 @@ def add_quiz():
         datetime_str = request.form.get("datetime")
         date_time = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M")
 
-        duration = request.form.get("duration")
+        duration_str = request.form.get("duration")
+        if len(duration_str) == 5:
+            duration_str += ":00"
+
+        duration = datetime.strptime(duration_str, "%H:%M:%S").time()
+
         score = request.form.get("score")
 
         quiz = Quiz(user_id=user_id,chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
@@ -321,6 +326,107 @@ def delete_chap(id):
     db.session.delete(c)
     db.session.commit()
     return redirect(url_for("admin.admin_dashboard"))
+
+
+
+
+
+def get_quiz(id):
+    q = Quiz.query.filter_by(id = id).first()
+    return q
+
+
+@admin.route("/edit_quiz/<id>", methods=['GET','POST'])
+def edit_quiz(id):
+    q = get_quiz(id)
+    # print(s)
+    if request.method == "POST":
+        date_time_str = request.form.get("date_time")
+        duration_str = request.form.get("duration")
+        score = request.form.get("score")
+
+        if len(duration_str) == 5:
+            duration_str += ":00"
+
+        
+        duration = datetime.strptime(duration_str, "%H:%M:%S").time()
+        date_time = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M")
+
+        q.duration = duration
+        q.date_time = date_time
+        q.score = score
+
+        db.session.commit()
+
+        return redirect(url_for("admin.admin_dashboard"))
+    
+    return render_template("edit_quiz.html", quiz = q)
+
+
+@admin.route("/delete_quiz/<id>", methods=['GET','POST'])
+def delete_quiz(id):
+    q = get_quiz(id)
+    db.session.delete(q)
+    db.session.commit()
+    return redirect(url_for("admin.admin_dashboard"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_que(id):
+    q = Question.query.filter_by(id = id).first()
+    return q
+
+
+@admin.route("/edit_que/<id>", methods=['GET','POST'])
+def edit_que(id):
+    q = get_que(id)
+    # print(s)
+    if request.method == "POST":
+        name = request.form.get("name")
+        description = request.form.get("description")
+        option1 = request.form.get("op1")
+        option2 = request.form.get("op2")
+        option3 = request.form.get("op3")
+        option4 = request.form.get("op4")
+        correct_option = request.form.get("correct_option")
+        
+        q.name = name
+        q.description = description
+        q.option1 = option1 
+        q.option2 = option2 
+        q.option3 = option3 
+        q.option4 = option4 
+        q.correct_option = correct_option 
+
+        db.session.commit()
+
+        return redirect(url_for("admin.quiz"))
+    return render_template("edit_que.html", que = q)
+
+
+@admin.route("/delete_que/<id>", methods=['GET','POST'])
+def delete_que(id):
+    q = get_que(id)
+    db.session.delete(q)
+    db.session.commit()
+    return redirect(url_for("admin.quiz"))
+
+
+
+
+
+
 
 
 

@@ -97,7 +97,7 @@ class Quiz(db.Model):
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
 
     date_time = db.Column(db.DateTime, nullable=False)
-    duration = db.Column(db.Integer, nullable=False)
+    duration = db.Column(db.Time, nullable=False)
     score = db.Column(db.Integer, nullable=False)
     
 

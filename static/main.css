@@ -18,12 +18,12 @@
     border-radius: 10px;
     font-size: 16px;
     text-align: justify;
-    /* height: auto; */
+    height: auto;
     /* width: auto; */
 }
 
 .outer_box{
-    border: 1px solid orange;
+    border: 1px solid  rgb(231, 153, 44);
     margin: auto;
     padding: 10px;
     border-radius: 10px;

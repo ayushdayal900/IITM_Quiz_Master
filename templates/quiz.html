@@ -2,9 +2,9 @@
 {% block content %}
 <div class="container-fluid py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h2 text-primary mb-0">Quizzes</h1>
+    <h1 style="color: rgb(231, 153, 44)" class="h2 text-primary mb-0">Quizes</h1>
     <a href="{{ url_for('admin.add_quiz') }}" class="btn btn-success rounded-square">
-      <i class="fas fa-plus-circle me-2"></i> Add New Quiz
+      <i style="color: rgb(231, 153, 44)" class="fas fa-plus-circle me-2"></i> Add New Quiz
     </a>
   </div>
   
@@ -14,9 +14,9 @@
       <div class="card border rounded-3 h-100">
         <!-- Card Header -->
         <div class="card-header bg-white border-bottom py-2">
-          <h5 class="card-title text-center fw-bold mb-0">{{ quiz.name }}</h5>
-          <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}"> <div class="text-center text-muted small">Quiz({{quiz.id}}): {{ quiz.chapter.name }}</div></a>
+          <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}"><h5 class="card-title text-center fw-bold mb-0">Quiz({{quiz.id}}): {{ quiz.chapter.name }}</h5></a>
         </div>
+
         
         <!-- Card Body -->
         <div class="card-body p-0">
@@ -37,13 +37,13 @@
                   <td>{{ que.id }}</td>
                   <td>{{ que.name }}</td>
                   <td>{{ que.description }}</td>
-                  <!-- <td>
+                  <td>
                     <div class="d-flex">
-                      <a href="{{url_for('admin.edit_quiz', id = quiz.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
+                      <a href="{{url_for('admin.edit_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
                       <span class="mx-1">/</span>
-                      <a href="{{url_for('admin.delete_quiz', id = quiz.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                      <a href="{{url_for('admin.delete_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
                     </div>
-                  </td> -->
+                  </td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -59,7 +59,7 @@
         <!-- Card Footer -->
         <div class="card-footer bg-white border-top p-2 text-end">
           <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus me-1"></i> Add Question
+            <i style="color: rgb(231, 153, 44)" class="fas fa-plus me-1"></i> Add Question
           </a>
         </div>
       </div>
