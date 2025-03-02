@@ -44,8 +44,8 @@
 }
 
 .body{
-    background-image: url('./images/bg_app_1.jpg');
-    background-repeat: no-repeat;
+    background-image: url('./images/bg_app_1a.jpg');
+    background-repeat: repeat;
     background-size: cover;
     background-position: center;
     height: 70vh;

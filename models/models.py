@@ -17,17 +17,34 @@ class User_Info(db.Model):
     quizs = db.relationship("Quiz", cascade="all,delete", backref="user_info", lazy=True)
 
 
+
+
+
+
+
+
+
+
+
 class Subject(db.Model):
     __tablename__ = "subject"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     description = db.Column(db.String, nullable=False)
     
-    # 
     chaps = db.relationship("Chapter", cascade="all,delete", backref="subject", lazy=True)
 
 
+
+
+
+
+
+
+
+
 class Chapter(db.Model):
+
     __tablename__ = "chapter"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
@@ -37,6 +54,15 @@ class Chapter(db.Model):
     
     ques = db.relationship("Question", cascade="all,delete", backref="chapter", lazy=True)
     quizs = db.relationship("Quiz", cascade="all,delete", backref="chapter", lazy=True)
+
+
+
+
+
+
+
+
+
 
 
 class Question(db.Model):
@@ -53,6 +79,15 @@ class Question(db.Model):
     option3 = db.Column(db.String, nullable=False)  
     option4 = db.Column(db.String, nullable=False)  
     correct_option = db.Column(db.Integer, nullable=False)  
+    
+
+
+
+
+
+
+
+
     
 
 class Quiz(db.Model):

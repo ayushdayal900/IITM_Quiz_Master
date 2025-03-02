@@ -28,6 +28,7 @@
                   <th class="text-primary">Question Id</th>
                   <th class="text-primary">Question Name</th>
                   <th class="text-primary">Description</th>
+                  <th class="text-primary">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -36,6 +37,13 @@
                   <td>{{ que.id }}</td>
                   <td>{{ que.name }}</td>
                   <td>{{ que.description }}</td>
+                  <!-- <td>
+                    <div class="d-flex">
+                      <a href="{{url_for('admin.edit_quiz', id = quiz.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
+                      <span class="mx-1">/</span>
+                      <a href="{{url_for('admin.delete_quiz', id = quiz.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                    </div>
+                  </td> -->
                 </tr>
                 {% endfor %}
               </tbody>

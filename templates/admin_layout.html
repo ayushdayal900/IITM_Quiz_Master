@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Admin Dashboard</title>
 </head>
+<div class="center"> <h1 style="color: rgb(231, 153, 44);">Welcome to Admin</h1></div>
 <body class="body">
     <div class="my_container">
         <div class="my_panel">
@@ -23,10 +24,9 @@
                             <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                     </ul>
                 </div>
-                <form class="d-flex" action="/search/{{name}}" method="POST">
-                    
+                <form class="d-flex" action="/search" method="POST">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_txt" id="search_txt">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-warning" type="submit">Search</button>
                 </form>
             </div>
             </nav>

@@ -16,8 +16,9 @@
     {% for sub in subs %}
     <div class="col">
       <div class="card border rounded-3 h-100">
+
         <div class="card-header bg-white border-bottom py-2">
-          <h5 class="card-title text-center fw-bold mb-0">{{ sub.name }}</h5>
+          <a href="./edit_sub/{{sub.id}}"> <h5 class="card-title text-center fw-bold mb-0">{{ sub.name }}</h5></a>
         </div>
         
         <div class="card-body p-0">
@@ -35,12 +36,12 @@
                   {% for chap in sub.chaps %}
                   <tr>
                     <td>{{ chap.name }}</td>
-                    <td>{{ chap.ques }}</td>
+                    <td>{{ chap.ques|length }}</td>
                     <td>
                       <div class="d-flex">
-                        <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
+                        <a href="{{url_for('admin.edit_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
                         <span class="mx-1">/</span>
-                        <a href="#" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
                       </div>
                     </td>
                   </tr>
@@ -56,9 +57,15 @@
         </div>
         
         <div class="card-footer bg-white border-top p-2 text-end">
+
           <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}" class="btn btn-sm btn-danger">
             + Chapter
           </a>
+
+          <a style="margin-left: 230px;" href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="btn btn-sm btn-danger">
+            Delete Subject
+          </a>
+
         </div>
       </div>
     </div>

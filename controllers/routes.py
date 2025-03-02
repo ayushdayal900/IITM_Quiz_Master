@@ -4,11 +4,20 @@ from models.models import Quiz, db, User_Info, Subject, Chapter, Question
 # from models import db
 
 
+
+
+
 # general routes
 gen = Blueprint('general_routes', __name__)  
 dB = Blueprint('database_routes', __name__)  
 admin = Blueprint('admin', __name__)  
 user = Blueprint('user', __name__)  
+
+
+
+
+
+
 
 
 
@@ -44,6 +53,8 @@ def login():
         else:
             return render_template('login.html',msg="Invalid User Credentials.")
     return render_template('login.html',msg="")
+
+
 
 
 @gen.route('/signup', methods=["GET", "POST"])
@@ -98,8 +109,7 @@ def summary():
 @admin.route('/quiz')
 def quiz():
     quizes = Quiz.query.all() 
-    ques = Question.query.all()
-    return render_template('quiz.html',quizes = quizes, ques=ques)
+    return render_template('quiz.html',quizes = quizes)
 
 
 
@@ -197,6 +207,130 @@ def add_question(cid,qid):
 
         return redirect(url_for("admin.quiz"))
     return render_template('add_question.html',cid = cid,qid = qid,chaps = chaps)
+
+
+
+def search_by_username(e):
+    user = User_Info.query.filter(User_Info.email.ilike(f"%{e}%")).first()     
+    return user
+
+
+def search_by_sub_name(s):
+    sub = Subject.query.filter(Subject.name.ilike(f"%{s}%")).all()     
+    return sub
+
+# def search_by_chap_for_quiz_name(c):
+#     chap = Chapter.query.filter(Chapter.name.ilike(f"%{c}%")).all()     
+#     return chap
+
+def search_by_quiz_id(q):
+    quiz = Quiz.query.filter(Quiz.id.ilike(f"%{q}%")).all()     
+    return quiz
+
+
+
+
+@admin.route("/search", methods=['POST', 'GET'])
+def search():
+    if request.method == "POST":
+        search_txt = request.form.get('search_txt')
+
+        by_username = search_by_username(search_txt)
+        by_subs = search_by_sub_name(search_txt)
+        # by_chaps = search_by_chap_for_quiz_name(search_txt)
+        by_quizs = search_by_quiz_id(search_txt)
+
+
+        if by_username:
+            print(by_username)
+            return render_template('./search/user_profile.html', user= by_username)
+        elif by_subs:
+            return render_template('./admin_dashboard.html', subs= by_subs)
+        # elif by_chaps:
+        #     return render_template('./quiz.html', chaps= by_chaps)
+        elif by_quizs:
+            return render_template('./quiz.html', quizes= by_quizs)
+        
+
+
+
+    return redirect(url_for("admin.admin_dashboard"))
+
+
+
+def get_sub(id):
+    s = Subject.query.filter_by(id = id).first()
+    return s
+
+
+@admin.route("/edit_sub/<id>", methods=['GET','POST'])
+def edit_sub(id):
+    s = get_sub(id)
+    # print(s)
+    if request.method == "POST":
+        name = request.form.get("name")
+        description = request.form.get("description")
+
+        s.name = name
+        s.description = description
+        db.session.commit()
+
+        return redirect(url_for("admin.admin_dashboard"))
+    return render_template("edit_sub.html", sub = s)
+
+
+@admin.route("/delete_sub/<id>", methods=['GET','POST'])
+def delete_sub(id):
+    s = get_sub(id)
+    db.session.delete(s)
+    db.session.commit()
+    return redirect(url_for("admin.admin_dashboard"))
+
+
+
+
+
+def get_chap(id):
+    c = Chapter.query.filter_by(id = id).first()
+    return c
+
+
+@admin.route("/edit_chap/<id>", methods=['GET','POST'])
+def edit_chap(id):
+    c = get_chap(id)
+    
+    if request.method == "POST":
+        name = request.form.get("name")
+        description = request.form.get("description")
+        
+        c.name = name
+        c.description = description
+
+        db.session.commit()
+
+        return redirect(url_for("admin.admin_dashboard"))
+    return render_template("edit_chap.html", chap = c)
+
+
+
+
+
+@admin.route("/delete_chap/<id>", methods=['GET','POST'])
+def delete_chap(id):
+    c = get_chap(id)
+    db.session.delete(c)
+    db.session.commit()
+    return redirect(url_for("admin.admin_dashboard"))
+
+
+
+
+
+
+
+
+
+
 
 
 
