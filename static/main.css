@@ -6,14 +6,15 @@
 
 .input_form{
     border: 1px solid blue;
-    background-color: rgb(214, 230, 229, 0.3);
+    background-color: rgba(90, 139, 160, 0.3);
     width: 600px;
+    
 
     font-weight: bold;
     color: rgb(255, 188, 63);
     height: 600px;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 40px;
     padding: 10px;
     border-radius: 10px;
     font-size: 16px;
@@ -42,6 +43,11 @@
     margin: auto;
     color: maroon;
 }
+.success_msg{
+    text-align: center;
+    margin: auto;
+    color: green;
+}
 
 .body{
     background-image: url('./images/bg_app_1a.jpg');
@@ -59,3 +65,12 @@
 }
 
 
+.all_quiz{
+ 
+    /* width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+     */
+    
+}

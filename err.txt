@@ -1,0 +1,3 @@
+duration not coming in quiz->view
+wrong back button in admin quiz->view
+delete quiz option

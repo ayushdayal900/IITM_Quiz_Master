@@ -101,4 +101,4 @@ class Quiz(db.Model):
     score = db.Column(db.Integer, nullable=False)
     
 
-    questions = db.relationship("Question", backref="quiz")
+    questions = db.relationship("Question", cascade="all,delete",backref="quiz",lazy=True)

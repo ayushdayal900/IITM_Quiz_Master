@@ -185,6 +185,16 @@ def add_quiz():
 
 
 
+# @admin.route('/delete_quiz/<id>', methods=["POST", "GET"])
+# def delete_quiz(id):
+#     quiz = Quiz.query.filter_by(id == id).first()
+#     db.session.delete(quiz)
+#     db.session.commit()
+#     return redirect(url_for("admin.admin_dashboard"))
+
+
+
+
 
 @admin.route('/add_question/<cid>/<qid>', methods=["POST", "GET"])
 def add_question(cid,qid):
@@ -358,7 +368,7 @@ def edit_quiz(id):
 
         db.session.commit()
 
-        return redirect(url_for("admin.admin_dashboard"))
+        return redirect(url_for("admin.quiz"))
     
     return render_template("edit_quiz.html", quiz = q)
 
@@ -368,7 +378,7 @@ def delete_quiz(id):
     q = get_quiz(id)
     db.session.delete(q)
     db.session.commit()
-    return redirect(url_for("admin.admin_dashboard"))
+    return redirect(url_for("admin.quiz"))
 
 
 
@@ -455,11 +465,64 @@ def delete_que(id):
 # user routes
 @user.route('/user_dashboard')
 def user_dashboard():
-    return render_template('user_dashboard.html')
+    quizs = Quiz.query.all()
+    curr_dt = datetime.now()
+    return render_template('user_dashboard.html',quizs = quizs, curr_dt = curr_dt)
+
+@user.route('/view_quiz/<id>')
+def view_quiz(id):
+    quiz = Quiz.query.filter_by(id = id).first()
+    return render_template('quiz_details.html',quiz = quiz)
+
+
+@user.route('/start_quiz/<id>')
+def start_quiz(id):
+    quiz = Quiz.query.filter_by(id=id).first()
+    return render_template('quiz_details.html',quiz = quiz)
 
 
 
 
+
+
+
+
+
+
+
+def search_by_quiz_score(s):
+    quizs = Quiz.query.filter(Quiz.score.ilike(f"%{s}%")).all()     
+    return quizs
+
+
+def search_by_quiz_date(s):
+    quizs = Quiz.query.filter(Quiz.date_time.ilike(f"%{s}%")).all()     
+    return quizs
+
+
+
+
+@user.route("/usr_search", methods=['POST', 'GET'])
+def usr_search():
+    if request.method == "POST":
+
+        search_txt = request.form.get('search_txt')
+
+        curr_dt = datetime.now()
+
+        by_score = search_by_quiz_score(search_txt)
+        by_date = search_by_quiz_date(search_txt)
+        print(by_score)
+        print(by_date)
+
+        if by_score:
+            print(by_score)
+            return render_template('./user_dashboard.html', quizs = by_score, curr_dt = curr_dt)
+        elif by_date:
+            return render_template('./user_dashboard.html', quizs = by_date, curr_dt = curr_dt)
+        
+        
+    return redirect(url_for("user.user_dashboard"))
 
 
 
@@ -471,10 +534,12 @@ def user_dashboard():
 @dB.route('/users')
 def users():
     user = User_Info.query.all()
-    return render_template('user_dashboard.html', users = user)
+    curr_dt = datetime.now()
+    return render_template('user_dashboard.html', users = user, curr_dt = curr_dt)
 
 
 @dB.route('/search')
 def search():
     user = User_Info.query.all()
-    return render_template('user_dashboard.html', users = user)
+    curr_dt = datetime.now()
+    return render_template('user_dashboard.html', users = user, curr_dt = curr_dt)
