@@ -5,7 +5,7 @@
 <div class="container py-4">
   <!-- Page Title -->
   <div class="text-center mb-4">
-    <h2 class="fw-bold text-primary">Upcoming Quizzes</h2>
+    <h2 class="orange_text text-primary">Quiz Scores</h2>
   </div>
 
   {% if quizs %}
@@ -15,22 +15,18 @@
           <tr>
             <th>ID</th>
             <th>No. of Questions</th>
-            <th>Date & Time</th>
-            <th>Duration (hh:mm:ss)</th>
+            <th>Date & Time </th>
             <th>Score</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody style="color: white;">
           {% for quiz in quizs %}
-          {% if quiz.date_time >=curr_dt  %}
-          
+          {% if quiz.is_attempted %}
           <tr>
             <td>{{ quiz.id }}</td>
             <td>{{ quiz.questions|length }}</td>
-            <td>{{ quiz.date_time }}</td>
-            <td>{{ quiz.duration }}</td>
-            <td>{{ quiz.score }}</td>
+            <td>{{ score.time_stamp_of_attempt }}</td>
+            <td>{{ score.user_info.user_score }} / {{ score.total_score }}</td>
             <td>
               <!-- Action Buttons -->
               <div class="d-flex gap-2">
@@ -38,11 +34,10 @@
                    class="btn btn-sm btn-primary">
                   View
                 </a>
-                <a href="{{ url_for('user.get_question', quiz_id=quiz.id, q_no=1) }}" 
-                class="btn">
-                Start Quiz
-              </a>
-
+                <a href="{{ url_for('user.start_quiz', id=quiz.id) }}"
+                   class="btn btn-sm btn-success">
+                  Start
+                </a>
               </div>
             </td>
           </tr>

@@ -3,13 +3,7 @@ wrong back button in admin quiz->view
 delete quiz option
 
 
-* score table
-id - primary key
-quiz_id (foreign key-quiz)
-user_id (foreign key-user)
-time_stamp_of_attempt
-total_scored
-etc: Additional fields (if any)
+------------------ start quiz template
 
 ----------> user
 1. To be able to choose the subject as well as the chapter name

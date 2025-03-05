@@ -1,6 +1,8 @@
 from datetime import datetime
-from flask import Blueprint, redirect, render_template, request, url_for
-from models.models import Quiz, db, User_Info, Subject, Chapter, Question
+from flask import Blueprint, abort, redirect, render_template, request, session, url_for
+from flask_login import current_user, login_required, login_user
+from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
+from app import login_manager
 # from models import db
 
 
@@ -45,9 +47,11 @@ def login():
         
         #existed and admin
         if usr and usr.role==0: 
+            login_user(usr)
             return redirect(url_for("admin.admin_dashboard"))
         #existed and user
         elif usr and usr.role==1:
+            login_user(usr)
             return redirect(url_for("user.user_dashboard"))
         # no one
         else:
@@ -394,6 +398,8 @@ def delete_quiz(id):
 
 
 
+
+
 def get_que(id):
     q = Question.query.filter_by(id = id).first()
     return q
@@ -429,6 +435,7 @@ def edit_que(id):
 @admin.route("/delete_que/<id>", methods=['GET','POST'])
 def delete_que(id):
     q = get_que(id)
+
     db.session.delete(q)
     db.session.commit()
     return redirect(url_for("admin.quiz"))
@@ -462,8 +469,9 @@ def delete_que(id):
 
 
 
-
 # user routes
+
+# @login_required
 @user.route('/user_dashboard')
 def user_dashboard():
     quizs = Quiz.query.all()
@@ -476,11 +484,89 @@ def view_quiz(id):
     return render_template('quiz_details.html',quiz = quiz)
 
 
-@user.route('/start_quiz/<id>')
-def start_quiz(id):
-    quiz = Quiz.query.filter_by(id=id).first()
-    return render_template('quiz_details.html',quiz = quiz)
 
+# ///////////////////////////////////////////////////////
+@user.route("/quiz/<int:quiz_id>/question/<int:q_no>")
+@login_required
+def get_question(quiz_id, q_no):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    questions = Question.query.filter_by(quiz_id=quiz_id).all()
+    
+    if not questions:
+        abort(404)
+    
+    # Start new attempt when accessing the first question
+    if q_no == 1:
+        new_score = Score(
+            user_id=current_user.id,
+            quiz_id=quiz_id,
+            time_stamp_of_attempt=datetime.utcnow(),
+            score=0
+        )
+        db.session.add(new_score)
+        db.session.commit()
+        session['current_score_id'] = new_score.id
+    
+    if q_no > len(questions):
+        return redirect(url_for("user.quiz_summary", quiz_id=quiz_id))
+    
+    question = questions[q_no - 1]
+    return render_template("question.html", question=question, q_no=q_no, total=len(questions))
+
+@user.route("/quiz/<int:quiz_id>/answer", methods=["POST"])
+@login_required
+def submit_answer(quiz_id):
+    current_score_id = session.get('current_score_id')
+    if not current_score_id:
+        return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
+    
+    score_entry = Score.query.get(current_score_id)
+    if not score_entry:
+        session.pop('current_score_id', None)
+        return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
+    
+    q_no = int(request.form["q_no"])
+    selected_option = int(request.form["selected_option"])
+    question = Question.query.get(request.form["question_id"])
+    is_correct = (question.correct_option == selected_option)
+    
+    if is_correct:
+        score_entry.score += 1
+        db.session.commit()
+    
+    return redirect(url_for("user.get_question", quiz_id=quiz_id, q_no=q_no + 1))
+
+
+@user.route("/quiz/<int:quiz_id>/summary")
+@login_required
+def quiz_summary(quiz_id):
+    current_score_id = session.get('current_score_id')
+    if not current_score_id:
+        return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
+    
+    score_entry = Score.query.get(current_score_id)
+    if not score_entry:
+        session.pop('current_score_id', None)
+        return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
+    
+    # Update user's maximum score
+    if score_entry.score > current_user.user_score:
+        current_user.user_score = score_entry.score
+        db.session.commit()
+    
+    session.pop('current_score_id', None)
+    return render_template("summary.html", score=score_entry.score, max_score=current_user.user_score)
+# /////////////////////////////////////////////////////////////////////
+@user.route('/scores')
+@login_required
+def scores():
+
+    quizs = Quiz.query.all()
+    # score = Score.query.filter_by(user_id = user_id).first()
+    # user_scores = Score.query.filter_by(user_id=current_user.id).first()
+    print(current_user.email)
+    return render_template('scores.html',quizs = quizs)
+    # return render_template('scores.html')
 
 
 

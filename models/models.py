@@ -1,10 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
 
-class User_Info(db.Model):
+class User_Info(db.Model, UserMixin):
     __tablename__ = "user_info"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
@@ -13,6 +13,7 @@ class User_Info(db.Model):
     qualification = db.Column(db.Integer, nullable=False)
     role = db.Column(db.Integer, default=1)
     dob = db.Column(db.Date, nullable=False)
+    user_score = db.Column(db.Integer, default=0)    
 
     quizs = db.relationship("Quiz", cascade="all,delete", backref="user_info", lazy=True)
 
@@ -99,6 +100,23 @@ class Quiz(db.Model):
     date_time = db.Column(db.DateTime, nullable=False)
     duration = db.Column(db.Time, nullable=False)
     score = db.Column(db.Integer, nullable=False)
-    
+    is_attempted = db.Column(db.Boolean, default=False)
 
     questions = db.relationship("Question", cascade="all,delete",backref="quiz",lazy=True)
+
+
+
+
+
+
+
+
+
+
+class Score(db.Model):
+    __tablename__ = "score"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+    time_stamp_of_attempt = db.Column(db.DateTime, nullable=False)
+    score = db.Column(db.Integer, nullable=False)  # Added to store attempt score

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container-fluid py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 style="color: rgb(231, 153, 44)" class="h2 text-primary mb-0">Quizes</h1>
+    <h2 class="orange_text mb-0">Quizes</h2>
     <a href="{{ url_for('admin.add_quiz') }}" class="btn btn-success rounded-square">
       <i style="color: rgb(231, 153, 44)" class="fas fa-plus-circle me-2"></i> Add New Quiz
     </a>
@@ -61,16 +61,16 @@
         <div class="card-footer bg-white border-top p-2 text-end">
 
           <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="btn btn-sm btn-primary">
-            <i style="color: rgb(231, 153, 44)" class="fas fa-plus me-1"></i> Add Question
+            <i class="fas fa-plus me-1"></i> Add Question
           </a>
 
           
           <a href="{{ url_for('admin.edit_quiz', id=quiz.id) }}" class="btn btn-sm btn-primary">
-            <i style="color: rgb(231, 153, 44)" class="fas fa-plus me-1"></i> Edit Quiz
+            <i class="fas fa-plus me-1"></i> Edit Quiz
           </a> 
 
           <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="btn btn-sm btn-danger">
-            <i style="color: rgb(231, 153, 44)" class="fas fa-plus me-1"></i> Delete
+            <i class="fas fa-plus me-1"></i> Delete
           </a>
 
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- <script src="{{ url_for('static', filename='quiz.js') }}" defer></script> -->
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.quiz-container {
+    width: 50%;
+    margin: auto;
+    border: 2px solid #000;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+.question-box {
+    margin-top: 20px;
+}
+
+    </style>
+
+<script>
+    let timeLeft = 15 * 60; // 15 minutes in seconds
+    function updateTimer() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft > 0) {
+            timeLeft--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+    updateTimer();
+</script>
+
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="header">
+            <!-- <span>QNo. <b>{{ q_no }} / {{ total }}</b></span> -->
+            <span>QNo. <b>{{ q_no }} / {{ total }}</b></span>
+            <span id="timer">00:15:00</span>
+        </div>
+
+        <div class="question-box">
+            <h2>{{ question.name }}</h2>
+            <form action="{{ url_for('user.submit_answer', quiz_id=question.quiz_id) }}" method="POST">
+                <input type="hidden" name="q_no" value="{{ q_no }}">
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+
+                <label><input type="radio" name="selected_option" value="1"> {{ question.option1 }}</label><br>
+                <label><input type="radio" name="selected_option" value="2"> {{ question.option2 }}</label><br>
+                <label><input type="radio" name="selected_option" value="3"> {{ question.option3 }}</label><br>
+                <label><input type="radio" name="selected_option" value="4"> {{ question.option4 }}</label><br>
+
+                <button type="submit">Save and Next</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

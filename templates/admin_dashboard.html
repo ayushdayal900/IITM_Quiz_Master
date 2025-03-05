@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container-fluid py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 style="color: rgb(231, 153, 44)" class="h2 text-primary mb-0">Subjects</h1>
+    <h2 class="orange_text mb-0">Subjects</h2>
       <!-- <a href="{{ url_for('admin.add_subject') }}" class="btn btn-warning rounded-square"> + </a> -->
 
       <a href="{{ url_for('admin.add_subject') }}" class="btn btn-success rounded-square">
@@ -58,7 +58,7 @@
         
         <div class="card-footer bg-white border-top p-2 text-end">
 
-          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}" class="btn btn-sm btn-danger">
+          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"  class="btn btn-sm btn-primary">
             + Chapter
           </a>
 
