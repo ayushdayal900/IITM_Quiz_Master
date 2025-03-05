@@ -160,7 +160,8 @@ def add_chapter(sid):
 @admin.route('/add_quiz', methods=["POST", "GET"])
 def add_quiz():
     if request.method == "POST":
-        user_id = request.form.get("user_id")  
+        # user_id = request.form.get("user_id")  
+        user_role = 0
         chapter_id = request.form.get("chapter_id")  
 
         datetime_str = request.form.get("datetime")
@@ -174,7 +175,7 @@ def add_quiz():
 
         score = request.form.get("score")
 
-        quiz = Quiz(user_id=user_id,chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
+        quiz = Quiz(user_role = user_role,chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
         
         db.session.add(quiz)
         db.session.commit()

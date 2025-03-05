@@ -16,7 +16,7 @@
             <th>ID</th>
             <th>No. of Questions</th>
             <th>Date & Time</th>
-            <th>Duration (hh:mm)</th>
+            <th>Duration (hh:mm:ss)</th>
             <th>Score</th>
             <th>Action</th>
           </tr>
@@ -35,7 +35,7 @@
               <!-- Action Buttons -->
               <div class="d-flex gap-2">
                 <a href="{{ url_for('user.view_quiz', id=quiz.id) }}"
-                   class="btn btn-sm btn-outline-primary">
+                   class="btn btn-sm btn-primary">
                   View
                 </a>
                 <a href="{{ url_for('user.start_quiz', id=quiz.id) }}"

@@ -1,0 +1,27 @@
+add questions in a chapter
+wrong back button in admin quiz->view
+delete quiz option
+
+
+* score table
+id - primary key
+quiz_id (foreign key-quiz)
+user_id (foreign key-user)
+time_stamp_of_attempt
+total_scored
+etc: Additional fields (if any)
+
+----------> user
+1. To be able to choose the subject as well as the chapter name
+2. Start the quiz
+3. View the quiz scores
+
+
+
+User dashboard - for the User
+
+The user can attempt any quiz of his/her interest
+Every quiz has a timer (timer is optional)
+Each quiz score is recorded
+The earlier quiz attempts are shown
+Shows the summary charts
