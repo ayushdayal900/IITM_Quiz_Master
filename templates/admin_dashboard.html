@@ -1,24 +1,25 @@
 {% extends "admin_layout.html" %}  
 {% block content %}
+
+
 <div class="container-fluid py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="orange_text mb-0">Subjects</h2>
+  
+    <h1 class="heading center">Subjects</h1>
       <!-- <a href="{{ url_for('admin.add_subject') }}" class="btn btn-warning rounded-square"> + </a> -->
 
-      <a href="{{ url_for('admin.add_subject') }}" class="btn btn-success rounded-square">
-        <i style="color: rgb(231, 153, 44)" class="fas fa-plus-circle me-2"></i> Add New Subject
-      </a>
+      <a href="{{ url_for('admin.add_subject') }}" class="inline-btn"> + Add Subject</a>
 
-
-  </div>
   
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-    {% for sub in subs %}
-    <div class="col">
-      <div class="card border rounded-3 h-100">
 
-        <div class="card-header bg-white border-bottom py-2">
-          <a href="./edit_sub/{{sub.id}}"> <h5 class="card-title text-center fw-bold mb-0">{{ sub.name }}</h5></a>
+  
+  <div style=" margin: 20px; font-size: 20px;" class="row">
+    {% for sub in subs %}
+    <div style="border-radius: 10px;" class="subjects"></section>
+    <div style="border-radius: 100px;" class="col">
+      <div class=" card border rounded-3 h-100">
+
+        <div class="heading1 card-header bg-white border-bottom py-3">
+          <a href="./edit_sub/{{sub.id}}"> <h5 class=" imp_title card-title text-center fw-bold mb-0">{{ sub.name }}</h5></a>
         </div>
         
         <div class="card-body p-0">
@@ -58,17 +59,13 @@
         
         <div class="card-footer bg-white border-top p-2 text-end">
 
-          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"  class="btn btn-sm btn-primary">
-            + Chapter
-          </a>
-
-          <a style="margin-left: 230px;" href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="btn btn-sm btn-danger">
-            Delete Subject
-          </a>
+          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"  class="inline-btn">+ Chapter</a>
+          <a href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="inline-delete-btn" style="margin-left: 160px;" >Delete Subject</a>
 
         </div>
       </div>
     </div>
+  </div>
     {% endfor %}
   </div>
   
@@ -81,3 +78,15 @@
   {% endif %}
 </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

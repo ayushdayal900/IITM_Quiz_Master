@@ -1,0 +1,32 @@
+{% extends "admin_layout.html" %}  
+{% block content %}
+<section class="subjects"> 
+<h1 class="center heading">Users</h1>
+
+<div class="box-container">
+{% for user in users %}
+    <div class="box">
+        <div class="subject">
+            <div class="center">
+                <h3 > User Mail: {{user.email}}</h3>
+            </div>
+        </div>
+        
+        <div class="description">
+            <p style="font-size: large;"><b class="orange_text">Id :</b> {{user.id}}</p>
+            <p style="font-size: large;"><b class="orange_text">Full Name :</b> {{user.full_name}}</p>
+            <p style="font-size: large;"><b class="orange_text">Qualification :</b> {{user.qualification}}</p>
+            <p style="font-size: large;"><b class="orange_text">DOB :</b> {{user.dob}}</p>
+            <p style="font-size: large;"><b class="orange_text">Score :</b> {{user.user_score}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+
+

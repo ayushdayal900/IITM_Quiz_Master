@@ -7,7 +7,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
 app.config['SECRET_KEY'] = '124567890987654321!@#$%^&*())(*&^%$#@!)'
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = "general_routes.login"
 
 
 @login_manager.user_loader
@@ -18,10 +18,10 @@ def load_user(user_id):
 
 def init_blueprints():
     # Import inside function to avoid circular import
-    from controllers.routes import gen, dB, admin, user  
+    from controllers.routes import gen, data, admin, user  
 
     app.register_blueprint(gen)
-    app.register_blueprint(dB)
+    app.register_blueprint(data)
     app.register_blueprint(admin)
     app.register_blueprint(user)
 
@@ -45,5 +45,5 @@ def initialize_database():
 db.init_app(app)  # Initialize database
 if __name__ == '__main__':
     initialize_database()
-    init_blueprints()  # Call this before running the app
+    init_blueprints()  
     app.run(debug=True)

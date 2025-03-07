@@ -1,0 +1,63 @@
+{% extends "user_layout.html" %}
+{% block content %}
+
+
+<div class="container py-4">
+  <!-- Page Title -->
+  <!-- <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">Upcoming Quizzes</h2>
+  </div> -->
+
+  {% if quizs %}
+    <div  class="table-responsive">
+      <table style="width: 1000px;"  class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>No. of Questions</th>
+            <th>Date & Time</th>
+            <th>Duration (hh:mm:ss)</th>
+            <th>Score</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody style="color: white;">
+          {% for quiz in quizs %}
+          {% if quiz.date_time >=curr_dt  %}
+          
+          <tr>
+            <td>{{ quiz.id }}</td>
+            <td>{{ quiz.questions|length }}</td>
+            <td>{{ quiz.date_time }}</td>
+            <td>{{ quiz.duration }}</td>
+            <td>{{ quiz.score }}</td>
+            <td>
+              <!-- Action Buttons -->
+              <div class="d-flex gap-2">
+                <a href="{{ url_for('user.view_quiz', id=quiz.id) }}"
+                   class="btn btn-sm btn-primary">
+                  View
+                </a>
+                <a href="{{ url_for('user.get_question', quiz_id=quiz.id, q_no=1) }}" 
+                class="btn">
+                Start Quiz
+              </a>
+
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <!-- If no quizzes -->
+    <div class="text-center p-5 bg-light rounded-3 mt-4">
+      <h3 class="text-primary">All Quizzes here...</h3>
+      <p class="text-muted">Get started by adding your first Quiz.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

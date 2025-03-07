@@ -2,53 +2,53 @@
 <!-- inheritamce -->
 {% block content %}
 
-            <div class="center"><h3>Edit Question</h3></div>
+            <div class="heading center"><h1>Edit Question</h1></div>
             <form action="/edit_que/{{que.id}}" method="POST">
                 <div class="input_form">
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Question Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="{{que.name}}">
+                        <input type="text" class="form-control" name="name" id="name" value="{{que.name}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" name="description" id="description" placeholder="{{que.description}}">
+                        <input type="text" class="form-control" name="description" id="description" value="{{que.description}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="op1" class="form-label">Option-1</label>
-                        <input type="text" class="form-control" name="op1" id="op1" placeholder="{{que.option1}}">
+                        <input type="text" class="form-control" name="op1" id="op1" value="{{que.option1}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="op1" class="form-label">Option-1</label>
-                        <input type="text" class="form-control" name="op1" id="op1" placeholder="{{que.option1}}">
+                        <input type="text" class="form-control" name="op1" id="op1" value="{{que.option1}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="op2" class="form-labe2">Option-2</label>
-                        <input type="text" class="form-control" name="op2" id="op2" placeholder="{{que.option2}}">
+                        <input type="text" class="form-control" name="op2" id="op2" value="{{que.option2}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="op3" class="form-labe2">Option-3</label>
-                        <input type="text" class="form-control" name="op3" id="op3" placeholder="{{que.option3}}">
+                        <input type="text" class="form-control" name="op3" id="op3" value="{{que.option3}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="op4" class="form-labe4">Option-4</label>
-                        <input type="text" class="form-control" name="op4" id="op4" placeholder="{{que.option4}}">
+                        <input type="text" class="form-control" name="op4" id="op4" value="{{que.option4}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="correct_option" class="form-labe4">Correct Option</label>
-                        <input type="text" class="form-control" name="correct_option" id="correct_option" placeholder="{{que.correct_option}}">
+                        <input type="text" class="form-control" name="correct_option" id="correct_option" value="{{que.correct_option}}">
                     </div>
                     
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{{url_for('admin.quiz')}}" type="button" class="btn btn-primary">Cancle</a>
+                    <button type="submit" class="inline-btn">Submit</button>
+                    <a href="{{url_for('admin.quiz')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
                 </div>
             </form>
 {% endblock%}   

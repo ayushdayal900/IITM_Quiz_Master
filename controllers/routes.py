@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, abort, redirect, render_template, request, session, url_for
-from flask_login import current_user, login_required, login_user
+from flask_login import current_user, login_required, login_user, logout_user
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
 from app import login_manager
 # from models import db
@@ -11,7 +11,7 @@ from app import login_manager
 
 # general routes
 gen = Blueprint('general_routes', __name__)  
-dB = Blueprint('database_routes', __name__)  
+data = Blueprint('database_routes', __name__)  
 admin = Blueprint('admin', __name__)  
 user = Blueprint('user', __name__)  
 
@@ -34,7 +34,9 @@ def home():
 
 @gen.route('/logout')
 def logout():
-    return render_template('login.html')
+
+    logout_user()
+    return redirect(url_for("general_routes.login"))
 
 
 
@@ -100,17 +102,20 @@ def signup():
 
 # admin routes
 @admin.route('/admin_dashboard')
+@login_required
 def admin_dashboard():
     subs = Subject.query.all()
     return render_template('admin_dashboard.html', subs = subs)
 
 
 @admin.route('/summary')
+@login_required
 def summary():
     return render_template('summary.html')
 
 
 @admin.route('/quiz')
+@login_required
 def quiz():
     quizes = Quiz.query.all() 
     return render_template('quiz.html',quizes = quizes)
@@ -119,6 +124,7 @@ def quiz():
 
 
 @admin.route('/quiz_details/<qzid>')
+@login_required
 def quiz_details(qzid):
     quiz = Quiz.query.filter_by(id=qzid).first() 
     return render_template('quiz_details.html',quiz = quiz)
@@ -128,6 +134,7 @@ def quiz_details(qzid):
 
 
 @admin.route('/add_subject', methods=["POST", "GET"])
+@login_required
 def add_subject():
     if request.method == "POST":
         name = request.form.get('name')
@@ -146,6 +153,7 @@ def add_subject():
 
 
 @admin.route('/add_chapter/<sid>', methods=["POST", "GET"])
+@login_required
 def add_chapter(sid):
     if request.method == "POST":
         name = request.form.get('name')
@@ -162,6 +170,7 @@ def add_chapter(sid):
 
 
 @admin.route('/add_quiz', methods=["POST", "GET"])
+@login_required
 def add_quiz():
     if request.method == "POST":
         # user_id = request.form.get("user_id")  
@@ -202,6 +211,7 @@ def add_quiz():
 
 
 @admin.route('/add_question/<cid>/<qid>', methods=["POST", "GET"])
+@login_required
 def add_question(cid,qid):
 
     chaps = Chapter.query.filter_by(id=cid).first()
@@ -230,19 +240,20 @@ def add_question(cid,qid):
 
 
 
+@login_required
 def search_by_username(e):
     user = User_Info.query.filter(User_Info.email.ilike(f"%{e}%")).first()     
     return user
 
 
+@login_required
 def search_by_sub_name(s):
     sub = Subject.query.filter(Subject.name.ilike(f"%{s}%")).all()     
     return sub
 
-# def search_by_chap_for_quiz_name(c):
-#     chap = Chapter.query.filter(Chapter.name.ilike(f"%{c}%")).all()     
-#     return chap
 
+
+@login_required
 def search_by_quiz_id(q):
     quiz = Quiz.query.filter(Quiz.id.ilike(f"%{q}%")).all()     
     return quiz
@@ -251,6 +262,7 @@ def search_by_quiz_id(q):
 
 
 @admin.route("/search", methods=['POST', 'GET'])
+@login_required
 def search():
     if request.method == "POST":
         search_txt = request.form.get('search_txt')
@@ -284,6 +296,7 @@ def get_sub(id):
 
 
 @admin.route("/edit_sub/<id>", methods=['GET','POST'])
+@login_required
 def edit_sub(id):
     s = get_sub(id)
     # print(s)
@@ -300,6 +313,7 @@ def edit_sub(id):
 
 
 @admin.route("/delete_sub/<id>", methods=['GET','POST'])
+@login_required
 def delete_sub(id):
     s = get_sub(id)
     db.session.delete(s)
@@ -316,6 +330,7 @@ def get_chap(id):
 
 
 @admin.route("/edit_chap/<id>", methods=['GET','POST'])
+@login_required
 def edit_chap(id):
     c = get_chap(id)
     
@@ -336,6 +351,7 @@ def edit_chap(id):
 
 
 @admin.route("/delete_chap/<id>", methods=['GET','POST'])
+@login_required
 def delete_chap(id):
     c = get_chap(id)
     db.session.delete(c)
@@ -352,6 +368,7 @@ def get_quiz(id):
 
 
 @admin.route("/edit_quiz/<id>", methods=['GET','POST'])
+@login_required
 def edit_quiz(id):
     q = get_quiz(id)
     # print(s)
@@ -379,6 +396,7 @@ def edit_quiz(id):
 
 
 @admin.route("/delete_quiz/<id>", methods=['GET','POST'])
+@login_required
 def delete_quiz(id):
     q = get_quiz(id)
     db.session.delete(q)
@@ -406,6 +424,7 @@ def get_que(id):
 
 
 @admin.route("/edit_que/<id>", methods=['GET','POST'])
+@login_required
 def edit_que(id):
     q = get_que(id)
     # print(s)
@@ -433,6 +452,7 @@ def edit_que(id):
 
 
 @admin.route("/delete_que/<id>", methods=['GET','POST'])
+@login_required
 def delete_que(id):
     q = get_que(id)
 
@@ -471,14 +491,15 @@ def delete_que(id):
 
 # user routes
 
-# @login_required
 @user.route('/user_dashboard')
+@login_required
 def user_dashboard():
     quizs = Quiz.query.all()
     curr_dt = datetime.now()
     return render_template('user_dashboard.html',quizs = quizs, curr_dt = curr_dt)
 
 @user.route('/view_quiz/<id>')
+@login_required
 def view_quiz(id):
     quiz = Quiz.query.filter_by(id = id).first()
     return render_template('quiz_details.html',quiz = quiz)
@@ -512,6 +533,10 @@ def get_question(quiz_id, q_no):
     
     question = questions[q_no - 1]
     return render_template("question.html", question=question, q_no=q_no, total=len(questions))
+
+
+
+
 
 @user.route("/quiz/<int:quiz_id>/answer", methods=["POST"])
 @login_required
@@ -576,12 +601,13 @@ def scores():
 
 
 
-
+@login_required
 def search_by_quiz_score(s):
     quizs = Quiz.query.filter(Quiz.score.ilike(f"%{s}%")).all()     
     return quizs
 
 
+@login_required
 def search_by_quiz_date(s):
     quizs = Quiz.query.filter(Quiz.date_time.ilike(f"%{s}%")).all()     
     return quizs
@@ -589,7 +615,9 @@ def search_by_quiz_date(s):
 
 
 
+
 @user.route("/usr_search", methods=['POST', 'GET'])
+@login_required
 def usr_search():
     if request.method == "POST":
 
@@ -614,18 +642,40 @@ def usr_search():
 
 
 
+@user.route("/subjects")
+@login_required
+def subjects():
+    subs = Subject.query.all()
+    return render_template('subjects.html', subs = subs)
+
+@user.route("/quizes")
+@login_required
+def quizes():
+    quizes = Quiz.query.all()
+    return render_template('quizes.html', quizes = quizes)
+
+@user.route("/detail_sub/<sid>")
+@login_required
+def detail_sub(sid):
+    sub = Subject.query.filter_by(id = sid).first()
+    print(sub)
+    return render_template('detail_sub.html', sub = sub)
+
+
 
 
 
 # database routes
-@dB.route('/users')
+@data.route("/users")
+@login_required
 def users():
     user = User_Info.query.all()
     curr_dt = datetime.now()
-    return render_template('user_dashboard.html', users = user, curr_dt = curr_dt)
+    return render_template('user_list.html', users = user)
 
 
-@dB.route('/search')
+@data.route('/search')
+@login_required
 def search():
     user = User_Info.query.all()
     curr_dt = datetime.now()

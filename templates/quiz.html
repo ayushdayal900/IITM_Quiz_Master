@@ -1,21 +1,21 @@
 {% extends "admin_layout.html" %}
 {% block content %}
 <div class="container-fluid py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="orange_text mb-0">Quizes</h2>
-    <a href="{{ url_for('admin.add_quiz') }}" class="btn btn-success rounded-square">
-      <i style="color: rgb(231, 153, 44)" class="fas fa-plus-circle me-2"></i> Add New Quiz
-    </a>
-  </div>
+  <h1 class="heading center">Quizes</h1>
+      <!-- <a href="{{ url_for('admin.add_subject') }}" class="btn btn-warning rounded-square"> + </a> -->
+
+      <a href="{{ url_for('admin.add_subject') }}" class="inline-btn"> + Add Quizes</a>
+
+  
   
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
     {% for quiz in quizes %}
-    <div class="col">
-      <div class="card border rounded-3 h-100">
+    <div style="font-size: 15px;" class="col">
+      <div style="margin: 10px;" class="card border rounded-3 h-100">
         <!-- Card Header -->
         <div class="card-header bg-white border-bottom py-2">
-          <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}"><h5 class="card-title text-center fw-bold mb-0">Quiz({{quiz.id}}): {{ quiz.chapter.name  }} </h5></a>
-          <h5 class="card-title text-center fw-bold mb-0">T. Score : {{quiz.score}}</h5>
+          <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}"><h5 class="imp_title card-title text-center fw-bold mb-0">Quiz({{quiz.id}}): {{ quiz.chapter.name  }} </h5></a>
+          <h5>T. Score : {{quiz.score}}</h5>
         </div>
 
         
@@ -58,21 +58,11 @@
         </div>
         
         <!-- Card Footer -->
-        <div class="card-footer bg-white border-top p-2 text-end">
+        <div style="font-size: 3px;" class="card-footer bg-white border-top p-2 text-end">
 
-          <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus me-1"></i> Add Question
-          </a>
-
-          
-          <a href="{{ url_for('admin.edit_quiz', id=quiz.id) }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-plus me-1"></i> Edit Quiz
-          </a> 
-
-          <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="btn btn-sm btn-danger">
-            <i class="fas fa-plus me-1"></i> Delete
-          </a>
-
+          <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="inline-btn"> + Add Question</a>
+          <a href="{{ url_for('admin.edit_quiz', id=quiz.id) }}" class="inline-btn"> Edit Quiz</a>
+          <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="inline-delete-btn"> Delete Quiz</a>
 
         </div>
       </div>

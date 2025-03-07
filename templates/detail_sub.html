@@ -1,0 +1,34 @@
+{% extends "user_layout.html" %}  
+{% block content %}
+<section class="subjects"> 
+<h1 class="center heading">Subject Name : {{sub.name}}</h1>
+<div class="box-container">
+
+
+{% for chap in sub.chaps %}
+    <div class="box">
+        <div class="subject">
+            <div class="quiz">
+                <h3 > Chapter Name: {{chap.name}}</h3>
+                
+                <h2 class="orange_text ">No of ques : {{chap.ques|length}}</h2>
+            </div>
+        </div>
+        
+        <div class="description">
+            <h3 > Chapter Description: {{chap.description}}</h3>
+        </div>
+    </div>
+        
+    {% endfor %}
+    
+
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+
+

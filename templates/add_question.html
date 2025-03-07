@@ -1,6 +1,6 @@
 {% extends "admin_layout.html" %}
 {% block content %}
-<div style="color: rgb(231, 153, 44)" class="center"><h3>Add Question</h3></div>
+<h1 class="center heading">Add Question</h1>
 <form action="{{ url_for('admin.add_question', cid=cid, qid=qid) }}" method="POST">
     <div class="input_form">
 
@@ -26,30 +26,30 @@
 
         <div class="container">
             <h2>Single Option Correct</h2>
-            <div class="input-group">
+            <div class="border input-group">
                 <label>Option 1)</label>
                 <input type="text" name="option1">
             </div>
-            <div class="input-group">
+            <div class="border input-group">
                 <label>Option 2)</label>
                 <input type="text" name="option2">
             </div>
-            <div class="input-group">
+            <div class="border input-group">
                 <label>Option 3)</label>
                 <input type="text" name="option3">
             </div>
-            <div class="input-group">
+            <div class="border input-group">
                 <label>Option 4)</label>
                 <input type="text" name="option4">
             </div>
-            <div class="input-group correct-option">
+            <div class="border input-group correct-option">
                 <label>Correct Option:</label>
                 <input type="number" name="correct_option" min="1" max="4" style="width: 50px; text-align: center;">
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="{{ url_for('admin.quiz') }}" class="btn btn-primary">Cancel</a>
+        <button type="submit" class="inline-btn">Submit</button>
+        <a href="{{ url_for('admin.quiz') }}" class="inline-delete-btn" style="margin-left: 330px;">Cancel</a>
     </div>
 </form>
 {% endblock %}

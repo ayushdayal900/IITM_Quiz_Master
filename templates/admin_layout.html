@@ -1,41 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>User Layout</title>
 
-    <title>Admin Dashboard</title>
+   <!-- font awesome cdn link  -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+   <!-- bootstrap link  -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <!-- css link  -->
+   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
 </head>
-<div class="center"> <h1 style="color: rgb(231, 153, 44);">Welcome to Admin</h1></div>
-<body class="body">
-    <div class="my_container">
-        <div class="my_panel">
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #1daccf; height: 60px;">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ url_for('admin.admin_dashboard') }}"><img style="height: 60px; width: 150px;" src="../static/images/logo_qm.jpeg" alt="logo image"> </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link active orange_text" aria-current="page" href="/admin_summary">Summary</a></li>
-                            <li class="nav-item "><a class="nav-link orange_text" href="/quiz">Quizes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                    </ul>
-                </div>
-                <form class="d-flex" action="/search" method="POST">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_txt" id="search_txt">
-                    <button class="btn btn-outline-warning" type="submit">Search</button>
-                </form>
-            </div>
-            </nav>
+<body>
 
-            {% block content %}
-            {% endblock %}
-        </div>
-    </div>
+<header class="header">
+   
+   <!-- logo -->
+   <img src="{{ url_for('static', filename='images/logo_qm.jpeg') }}" alt="logo for image" style="height: 100px; width: 160px;"></a>
+
+   <section class="flex">
+
+      <!-- search bar -->
+      <form action="{{ url_for('admin.search') }}" method="POST" class="search-form">
+         <input type="text" name="search_txt" placeholder="search..." maxlength="100">
+         <button type="submit" class="fas fa-search"></button>
+      </form>
+
+      <!-- icons -->
+      <div class="icons" style="margin-left: 100px ;">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-sun"></div>
+      </div>
+
+   </section>
+
+</header>   
+
+<div class="side-bar">
+
+   <div id="close-btn">
+      <i class="fas fa-times"></i>
+   </div>
+
+   <div class="profile">
+      <img src="{{ url_for('static', filename='images/admin_pic.jpg') }}" class="image" alt="">
+      <h3 class="name">{{current_user.email}}</h3>
+      <p class="role">student</p>
+      <!-- this is remaining -->
+      <a href="#" class="btn">view profile</a>   
+   </div>
+
+   <nav class="navbar">
+      <a href="#"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fa-solid fa-book-skull"></i></i><span>Subjects</span></a>
+      <a href="{{ url_for('admin.quiz') }}"><i class="fas fa-graduation-cap"></i><span>Quizes</span></a>
+      <a href="#"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
+      <a href="{{ url_for('database_routes.users') }}"><i class="fa-solid fa-user-tie"></i><span>Users</span></a>
+      <a href="{{ url_for('general_routes.logout') }}"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+   </nav>
+
+</div>
+
+
+{% block content %}
+
+{% endblock %}
+
+
+
+<!--  js link  -->
+<script src="{{ url_for('static', filename='quiz.js') }}" defer></script>
+
+   
 </body>
 </html>

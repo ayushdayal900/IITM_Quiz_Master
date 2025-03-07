@@ -2,27 +2,42 @@
 <!-- inheritamce -->
 {% block content %}
 
-            <div style="color: rgb(231, 153, 44)" class="center"><h3>Add Chapter</h3></div>
-            <form action="{{ url_for('admin.add_chapter', sid=sid) }}" method="POST">
-                <div class="input_form">
+            
+        
 
-                    <div class="mb-3">
-                        <label for="id" class="form-label">Subject Id</label>
-                        <input type="number" class="form-control" name="id" id="id" placeholder="{{sid}}" readonly>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Chapter Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Chapter Name">
-                    </div>
+<section class="subjects"> 
+<h1 class="center heading">Add Chapter</h1>
+<div class="box-container">
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" name="description" id="description" placeholder="Description">
-                    </div>
+    <form action="{{ url_for('admin.add_chapter', sid=sid) }}" method="POST">
+        <div class="input_form">
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="{{ url_for('admin.admin_dashboard') }}" type="button" class="btn btn-primary">Cancle</a>
-                </div>
-            </form>
-{% endblock%}   
+            <div class="mb-3">
+                <label for="id" class="form-label">Subject Id</label>
+                <input type="number" class="form-control" name="id" id="id" placeholder="{{sid}}" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Chapter Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Chapter Name">
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+            </div>
+
+            <button type="submit" class="inline-btn">Submit</button>
+            <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
+        </div>
+    </form>
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+
+
