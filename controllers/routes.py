@@ -122,45 +122,47 @@ def get_quizes():
     return quizes
 
 
-# Generate summary plot
-import matplotlib.pyplot as plt
 
-def get_users_summary():
+def get_users_quiz_summary():
     users = get_users()
-    
-    for user in users:
-        print(f"User: {user.full_name}")
-        for quiz in user.quizs:  # Iterate over related quizzes
-            print(f"Quiz ID: {quiz.id}, Score: {quiz.score}")
-        print("----------------------------")
-
     summary = {u.full_name: u.user_score for u in users}
-
+    
     x_names = list(summary.keys())
     y_scores = list(summary.values())
 
-    plt.figure(figsize=(8, 8))  # Set figure size
-    plt.pie(
-        y_scores, 
-        labels=x_names, 
-        autopct=lambda p: f'{int(p * sum(y_scores) / 100)}',
-        colors=["red", "blue", "green", "purple", "orange"],  # Custom colors
-        wedgeprops={'edgecolor': 'black'}  # Add border to slices
-    )
-    
-    # Create a white circle in the center to make it a donut
-    center_circle = plt.Circle((0, 0), 0.70, fc='white')  
-    plt.gca().add_artist(center_circle)
-    
-    plt.axis('equal')  # Keep the chart circular
-    
+    plt.figure(figsize=(10, 6))  # Set figure size
+    bars = plt.bar(x_names, y_scores, color=["red", "blue", "green", "purple", "orange"])
+    plt.title("Users Performance")
+    plt.xlabel("Users")
+    plt.ylabel("Score")
+    # plt.xticks(rotation=45)  # Rotate labels for readability
+
+    # Annotate each bar with its score
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(
+            bar.get_x() + bar.get_width() / 2,
+            height,
+            f'{int(height)}',
+            ha='center',
+            va='bottom'
+        )
+        
+    plt.tight_layout()
     return plt
 
 
 
 
+
+
+
+
+
 def get_quiz_que_summary():
-    quizes = get_quizes()
+    quizes = get_quizes()   
+    if not quizes:
+        return
     summary = {
 
         f"Quiz-{q.id}": len(q.questions) for q in quizes
@@ -179,17 +181,51 @@ def get_quiz_que_summary():
 
     
 
+def get_chapter_score_summary():
+    chapters = Chapter.query.all()
+    chapter_scores = {}
+    for chapter in chapters:
+        if chapter.quizs:
+            max_score = max(quiz.score for quiz in chapter.quizs)  # Changed to quiz.score
+        else:
+            max_score = 0  
+        chapter_scores[chapter.name] = max_score
+
+    x_names = list(chapter_scores.keys())
+    y_scores = list(chapter_scores.values())
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(x_names, y_scores, color="green")
+    plt.title("Chapter Maximum Score")
+    plt.xlabel("Chapter")
+    plt.ylabel("Maximum Score")
+    plt.tight_layout()
+    
+    return plt
+
+
+
 @admin.route('/admin_summary')
 @login_required
+
 def admin_summary():
-    
-
-    plot1 = get_users_summary()
-    plot1.savefig("./static/images/users_summary.jpeg")  # Save the plot
 
 
-    plot2 = get_quiz_que_summary()
-    plot2.savefig("./static/images/quiz_summary.jpeg")  # Save the plot
+    users = (
+        db.session.query(User_Info)
+        .join(Score, User_Info.id == Score.user_id) 
+        .distinct() 
+        .all()
+    )
+
+    plot1 = get_users_quiz_summary()
+    plot1.savefig("./static/images/users_summary.jpeg")
+
+    plot2 = get_chapter_score_summary()
+    plot2.savefig("./static/images/chap_score_summary.jpeg")
+
+    plot3 = get_quiz_que_summary()
+    plot3.savefig("./static/images/quiz_summary.jpeg") 
 
     plt.close()  # Close the figure to free memory
 
@@ -264,7 +300,7 @@ def add_chapter(sid):
 def add_quiz():
     if request.method == "POST":
         # user_id = request.form.get("user_id")  
-        user_role = 0
+        
         chapter_id = request.form.get("chapter_id")  
 
         datetime_str = request.form.get("datetime")
@@ -278,7 +314,7 @@ def add_quiz():
 
         score = request.form.get("score")
 
-        quiz = Quiz(user_role = user_role,chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
+        quiz = Quiz(user_id = current_user.id, chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
         
         db.session.add(quiz)
         db.session.commit()
@@ -498,18 +534,6 @@ def delete_quiz(id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def get_que(id):
     q = Question.query.filter_by(id = id).first()
     return q
@@ -570,17 +594,6 @@ def delete_que(id):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 # user routes
 
 @user.route('/user_dashboard')
@@ -598,13 +611,24 @@ def view_quiz(id):
 
 
 
-# ///////////////////////////////////////////////////////
+
+
+
+
+
+
+# score routes
+
 @user.route("/quiz/<int:quiz_id>/question/<int:q_no>")
 @login_required
 def get_question(quiz_id, q_no):
     quiz = Quiz.query.get_or_404(quiz_id)
     questions = Question.query.filter_by(quiz_id=quiz_id).all()
-    
+
+    quiz.is_attempted = True
+    quiz.user_id = current_user.id
+    db.session.commit()
+
     if not questions:
         abort(404)
     
@@ -633,6 +657,7 @@ def get_question(quiz_id, q_no):
 @user.route("/quiz/<int:quiz_id>/answer", methods=["POST"])
 @login_required
 def submit_answer(quiz_id):
+
     current_score_id = session.get('current_score_id')
     if not current_score_id:
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
@@ -648,10 +673,15 @@ def submit_answer(quiz_id):
     is_correct = (question.correct_option == selected_option)
     
     if is_correct:
-        score_entry.score += 1
+        score_entry.score += 10
         db.session.commit()
     
     return redirect(url_for("user.get_question", quiz_id=quiz_id, q_no=q_no + 1))
+
+
+
+
+
 
 
 @user.route("/quiz/<int:quiz_id>/summary")
@@ -666,24 +696,18 @@ def quiz_summary(quiz_id):
         session.pop('current_score_id', None)
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
     
-    # Update user's maximum score
+    # Optionally update global maximum
     if score_entry.score > current_user.user_score:
         current_user.user_score = score_entry.score
         db.session.commit()
     
     session.pop('current_score_id', None)
-    return render_template("summary.html", score=score_entry.score, max_score=current_user.user_score)
-# /////////////////////////////////////////////////////////////////////
-@user.route('/scores')
-@login_required
-def scores():
+    
+    return render_template("summary.html", current_quiz_score=score_entry.score, overall_max_score=current_user.user_score)
 
-    quizs = Quiz.query.all()
-    # score = Score.query.filter_by(user_id = user_id).first()
-    # user_scores = Score.query.filter_by(user_id=current_user.id).first()
-    print(current_user.email)
-    return render_template('scores.html',quizs = quizs)
-    # return render_template('scores.html')
+
+
+
 
 
 

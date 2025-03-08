@@ -94,14 +94,15 @@ class Question(db.Model):
 class Quiz(db.Model):
     __tablename__ = "quiz"
     id = db.Column(db.Integer, primary_key=True)
-    user_role = db.Column(db.Integer, db.ForeignKey('user_info.role'), default=1)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'), nullable=False)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
 
     date_time = db.Column(db.DateTime, nullable=False)
     duration = db.Column(db.Time, nullable=False)
     score = db.Column(db.Integer, nullable=False)
     is_attempted = db.Column(db.Boolean, default=False)
-
+    
+    usr_score = db.Column(db.Integer, default=0)
     questions = db.relationship("Question", cascade="all,delete",backref="quiz",lazy=True)
 
 

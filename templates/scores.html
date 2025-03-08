@@ -26,7 +26,7 @@
             <td>{{ quiz.id }}</td>
             <td>{{ quiz.questions|length }}</td>
             <td>{{ score.time_stamp_of_attempt }}</td>
-            <td>{{ score.user_info.user_score }} / {{ score.total_score }}</td>
+            <td>100*{{ score.user_info.user_score }} / {{ score.total_score }}</td>
             <td>
               <!-- Action Buttons -->
               <div class="d-flex gap-2">

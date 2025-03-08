@@ -27,6 +27,7 @@
             <table class="table table-hover table-sm mb-0">
               <thead class="bg-light">
                 <tr>
+                  <th class="text-primary">Chapter Id</th>
                   <th class="text-primary">Chapter name</th>
                   <th class="text-primary">No of questions</th>
                   <th class="text-primary">Action</th>
@@ -36,6 +37,7 @@
                 {% if sub.chaps %}
                   {% for chap in sub.chaps %}
                   <tr>
+                    <td>{{ chap.id }}</td>
                     <td>{{ chap.name }}</td>
                     <td>{{ chap.ques|length }}</td>
                     <td>
