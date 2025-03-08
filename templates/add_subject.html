@@ -8,16 +8,16 @@
 
                     <div class="mb-3">
                         <label for="name" class="form-label"><p class="orange_text bold">Subject Name</p></label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Subject Name">
+                        <input type="text" class="ip form-control" name="name" id="name" placeholder="Subject Name">
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+                        <input type="text" class="ip form-control" name="description" id="description" placeholder="Description">
                     </div>
 
                     <button type="submit" class="inline-btn">Submit</button>
-                    <a href="./add_subject.html" type="button" class="inline-delete-btn">Cancle</a>
+                    <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
                 </div>
             </form>
 {% endblock%}   

@@ -1,0 +1,32 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritamce -->
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card" style="width:33rem;">
+        <div  class="card-body">
+          <h5 class="card-title">User-Score Summary</h5>
+          <h6 class="card-subtitle mb-2 text-muted">User/Score</h6>
+          <div>
+            <img src="./static/images/users_summary.jpeg" width="300" height="300">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col">
+      <div class="card" style="width:33rem;">
+        <div class="card-body">
+          <h5 class="card-title">Quiz-Questions Summary</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Quiz/Questions</h6>
+          <div>
+            <img src="./static/images/quiz_summary.jpeg" width="300" height="300">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock%}

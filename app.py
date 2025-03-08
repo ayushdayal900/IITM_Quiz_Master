@@ -33,7 +33,7 @@ def initialize_database():
         admin_exists = User_Info.query.filter_by(id="0").first()
         if not admin_exists:
             admin = User_Info(id="0", email="admin@iitm.ac.in", password="123",  
-                              full_name="Admin Admin", qualification="12th", 
+                              full_name="Admin Admin", qualification="12", 
                               role=0, dob=datetime.strptime("2025-03-12", "%Y-%m-%d").date())
             db.session.add(admin)
             db.session.commit()

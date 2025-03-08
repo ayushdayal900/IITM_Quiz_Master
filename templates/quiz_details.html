@@ -4,8 +4,8 @@
 <h1 class="center heading">Quiz Deatils</h1>
 <div class="box-container">
 
-{% if quizes %}
-{% for quiz in quizes %}
+
+
     <div class="box">
         <div class="subject">
             <div class="quiz">
@@ -30,9 +30,6 @@
         </div>
     </div>
         
-    {% endfor %}
-    
-{% endif %}
     </div>
 </section>
 
@@ -40,37 +37,3 @@
 
 
 
-
-
-
-<form action="{{ url_for('admin.quiz_details', qzid = quiz.id) }}" method="POST">
-
-    <div class="input_form">
-
-        <div class="mb-3">
-            <label for="chapter_id" class="form-label">Chapter </label>
-            <input type="number" class="form-control" name="chapter_id" id="chapter_id" placeholder="aa" readonly>
-        </div>
-
-        <div class="mb-3">
-            <label for="datetime" class="form-label">Date - Time</label>
-            <input type="datetime" class="form-control" name="datetime" id="datetime" value="{{quiz.date_time}}" readonly>
-        </div>
-
-        <div class="mb-3">
-            <label for="duration" class="form-label">Duration</label>
-            <input type="time" class="form-control" name="duration" id="duration" value="{{ quiz.duration.strftime('%H:%M') if quiz.duration else '' }}" readonly>
-
-        </div>
-
-        <div class="mb-3">
-            <label for="score" class="form-label">Score</label>
-            <input type="number" class="form-control" name="score" id="score" value="{{quiz.score}}" readonly>
-        </div>
-
-        <!-- <button class="btn btn-primary">Back</button> -->
-        <a href="{{ url_for('admin.quiz') }}" class="btn btn-secondary">Back</a>
-
-    </div>
-</form>
-</div>

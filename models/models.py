@@ -94,7 +94,7 @@ class Question(db.Model):
 class Quiz(db.Model):
     __tablename__ = "quiz"
     id = db.Column(db.Integer, primary_key=True)
-    user_role = db.Column(db.Integer, db.ForeignKey('user_info.role'), nullable=False)
+    user_role = db.Column(db.Integer, db.ForeignKey('user_info.role'), default=1)
     chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)
 
     date_time = db.Column(db.DateTime, nullable=False)

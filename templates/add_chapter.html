@@ -10,22 +10,22 @@
 <h1 class="center heading">Add Chapter</h1>
 <div class="box-container">
 
-    <form action="{{ url_for('admin.add_chapter', sid=sid) }}" method="POST">
+    <form action="{{ url_for('admin.add_chapter', sid=sub.id) }}" method="POST">
         <div class="input_form">
 
             <div class="mb-3">
-                <label for="id" class="form-label">Subject Id</label>
-                <input type="number" class="form-control" name="id" id="id" placeholder="{{sid}}" readonly>
+                <label for="id" class="form-label">Subject Name</label>
+                <input type="number" class="ip form-control" name="id" id="id" placeholder="{{sub.name}}" readonly>
             </div>
 
             <div class="mb-3">
                 <label for="name" class="form-label">Chapter Name</label>
-                <input type="text" class="form-control" name="name" id="name" placeholder="Chapter Name">
+                <input type="text" class="ip form-control" name="name" id="name" placeholder="Chapter Name">
             </div>
 
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+                <input type="text" class="ip form-control" name="description" id="description" placeholder="Description">
             </div>
 
             <button type="submit" class="inline-btn">Submit</button>

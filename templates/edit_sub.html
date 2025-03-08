@@ -2,22 +2,22 @@
 <!-- inheritamce -->
 {% block content %}
 
-            <div class=" orange_text center"><h3>Edit Subject</h3></div>
+            <div class=" heading center"><h1>Edit Subject</h1></div>
             <form action="/edit_sub/{{sub.id}}" method="POST">
                 <div class="input_form">
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Subject Name</label>
-                        <input type="text" class="form-control" name="name" id="name" value="{{sub.name}}">
+                        <input type="text" class="ip form-control" name="name" id="name" value="{{sub.name}}">
                     </div>
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" name="description" id="description" value="{{sub.description}}">
+                        <input type="text" class="ip form-control" name="description" id="description" value="{{sub.description}}">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="./admin_dashboard.html" type="button" class="btn btn-primary">Cancle</a>
+                    <button type="submit" class="inline-btn btn-primary">Submit</button>
+                    <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
                 </div>
             </form>
 {% endblock%}   

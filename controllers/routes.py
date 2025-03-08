@@ -4,6 +4,10 @@ from flask_login import current_user, login_required, login_user, logout_user
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
 from app import login_manager
 # from models import db
+import matplotlib
+matplotlib.use('Agg')  # Use a non-GUI backend to avoid Tkinter issues
+
+import matplotlib.pyplot as plt  # Now import pyplot
 
 
 
@@ -108,10 +112,93 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', subs = subs)
 
 
-@admin.route('/summary')
+
+def get_users():
+    users = User_Info.query.all()
+    return users
+
+def get_quizes():
+    quizes = Quiz.query.all()
+    return quizes
+
+
+# Generate summary plot
+import matplotlib.pyplot as plt
+
+def get_users_summary():
+    users = get_users()
+    
+    for user in users:
+        print(f"User: {user.full_name}")
+        for quiz in user.quizs:  # Iterate over related quizzes
+            print(f"Quiz ID: {quiz.id}, Score: {quiz.score}")
+        print("----------------------------")
+
+    summary = {u.full_name: u.user_score for u in users}
+
+    x_names = list(summary.keys())
+    y_scores = list(summary.values())
+
+    plt.figure(figsize=(8, 8))  # Set figure size
+    plt.pie(
+        y_scores, 
+        labels=x_names, 
+        autopct=lambda p: f'{int(p * sum(y_scores) / 100)}',
+        colors=["red", "blue", "green", "purple", "orange"],  # Custom colors
+        wedgeprops={'edgecolor': 'black'}  # Add border to slices
+    )
+    
+    # Create a white circle in the center to make it a donut
+    center_circle = plt.Circle((0, 0), 0.70, fc='white')  
+    plt.gca().add_artist(center_circle)
+    
+    plt.axis('equal')  # Keep the chart circular
+    
+    return plt
+
+
+
+
+def get_quiz_que_summary():
+    quizes = get_quizes()
+    summary = {
+
+        f"Quiz-{q.id}": len(q.questions) for q in quizes
+
+        }
+
+    x_names = list(summary.keys())
+    y_scores = list(summary.values())
+
+    plt.figure(figsize=(10, 5))  
+    plt.bar(x_names, y_scores, color="red", width=0.4)
+    plt.title("Quiz Questions Summary")
+    plt.xlabel("Quiz")
+    plt.ylabel("Questions")
+    return plt
+
+    
+
+@admin.route('/admin_summary')
 @login_required
-def summary():
-    return render_template('summary.html')
+def admin_summary():
+    
+
+    plot1 = get_users_summary()
+    plot1.savefig("./static/images/users_summary.jpeg")  # Save the plot
+
+
+    plot2 = get_quiz_que_summary()
+    plot2.savefig("./static/images/quiz_summary.jpeg")  # Save the plot
+
+    plt.close()  # Close the figure to free memory
+
+    return render_template('admin_summary.html')
+
+
+
+
+
 
 
 @admin.route('/quiz')
@@ -119,6 +206,8 @@ def summary():
 def quiz():
     quizes = Quiz.query.all() 
     return render_template('quiz.html',quizes = quizes)
+
+
 
 
 
@@ -155,6 +244,7 @@ def add_subject():
 @admin.route('/add_chapter/<sid>', methods=["POST", "GET"])
 @login_required
 def add_chapter(sid):
+    sub = Subject.query.filter_by(id=sid).first()
     if request.method == "POST":
         name = request.form.get('name')
         description = request.form.get('description')
@@ -165,7 +255,7 @@ def add_chapter(sid):
         db.session.commit()
 
         return redirect(url_for("admin.admin_dashboard"))
-    return render_template('add_chapter.html',sid=sid)
+    return render_template('add_chapter.html',sub = sub)
 
 
 
@@ -214,12 +304,14 @@ def add_quiz():
 @login_required
 def add_question(cid,qid):
 
-    chaps = Chapter.query.filter_by(id=cid).first()
-    print(chaps)
+    chap = Chapter.query.filter_by(id=cid).first()
+    quiz = Quiz.query.filter_by(id=qid).first()
+    print(chap)
+    print(quiz)
 
     if request.method == "POST":
-        chapter_id = request.form.get('cid')
-        quiz_id = request.form.get('qid')
+        chapter_id = cid
+        quiz_id = qid
         name = request.form.get('name')
         description = request.form.get('description')
 
@@ -236,7 +328,7 @@ def add_question(cid,qid):
         db.session.commit()
 
         return redirect(url_for("admin.quiz"))
-    return render_template('add_question.html',cid = cid,qid = qid,chaps = chaps)
+    return render_template('add_question.html',cid = cid,qid = qid,chap = chap, quiz = quiz)
 
 
 
