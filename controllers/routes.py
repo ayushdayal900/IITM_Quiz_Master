@@ -619,6 +619,104 @@ def view_quiz(id):
 
 # score routes
 
+
+
+
+
+def get_scores():
+    scores = Score.query.filter_by(user_id=current_user.id).order_by(Score.time_stamp_of_attempt).all()
+    return scores
+
+def get_subs():
+    subs = Subject.query.all()
+    return subs
+
+
+
+def get_users_score_summary():
+    scores = get_scores()
+    
+    # Extract time stamps and corresponding scores
+    x_values = [s.time_stamp_of_attempt for s in scores]
+    y_values = [s.score for s in scores]
+    
+    plt.figure(figsize=(10, 6))
+    plt.plot(x_values, y_values, marker="o", linestyle="-", color="blue")
+    plt.title("Users Performance Over Time")
+    plt.xlabel("Time")
+    plt.ylabel("Score")
+    
+    # Optional: Format the x-axis if the datetime values are cluttered
+    plt.gcf().autofmt_xdate()
+    
+    plt.grid(True)
+    plt.tight_layout()
+    return plt
+
+
+
+
+
+def get_subs_chaps_summary():
+    subs = get_subs()
+    
+    summary = {s.name:len(s.chaps) for s in subs}
+    x_names = list(summary.keys())
+    y_scores = list(summary.values())
+    
+
+    plt.figure(figsize=(10, 6))  # Set figure size
+    bars = plt.bar(x_names, y_scores, color=["red", "blue", "green", "purple", "orange"])
+    plt.title("Subjects Chapters Summary")
+    plt.xlabel("Subjects")
+    plt.ylabel("Chapters")
+
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(
+            bar.get_x() + bar.get_width() / 2,
+            height,
+            f'{int(height)}',
+            ha='center',
+            va='bottom'
+        )
+        
+    plt.tight_layout()
+    return plt
+
+
+
+
+@user.route('/user_summary')
+@login_required
+def user_summary():
+
+    plot1 = get_users_score_summary()
+    plot1.savefig("./static/images/summary/users_score_summary.jpeg")
+
+    plot2 = get_subs_chaps_summary()
+    plot2.savefig("./static/images/summary/subs_chaps_summary.jpeg")
+    
+    plt.close()  
+    return render_template('user_summary.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @user.route("/quiz/<int:quiz_id>/question/<int:q_no>")
 @login_required
 def get_question(quiz_id, q_no):

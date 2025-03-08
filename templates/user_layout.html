@@ -68,7 +68,7 @@
       <a href="{{ url_for('user.subjects') }}"><i class="fa-solid fa-book-skull"></i></i><span>Subjects</span></a>
       <a href="{{ url_for('user.quizes') }}"><i class="fas fa-graduation-cap"></i><span>Quizes</span></a>
       <a href="#"><i class="fa-solid fa-percent"></i><span>Score</span></a>
-      <a href="#"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
+      <a href="{{url_for('user.user_summary')}}"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
       <a href="#"><i class="fa-solid fa-user-tie"></i><span>Admin</span></a>
       <a href="#"><i class="fas fa-headset"></i><span>Contact us</span></a>
       <a href="{{ url_for('general_routes.logout') }}"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
