@@ -219,15 +219,26 @@ def admin_summary():
     )
 
     plot1 = get_users_quiz_summary()
-    plot1.savefig("./static/images/users_summary.jpeg")
+    if(plot1):
+        plot1.savefig("./static/images/users_summary.jpeg")
+    else:
+        return render_template('msg.html', msg = "Plot image not found")
 
     plot2 = get_chapter_score_summary()
-    plot2.savefig("./static/images/chap_score_summary.jpeg")
+    if plot2:
+        plot2.savefig("./static/images/chap_score_summary.jpeg")
+    else:
+        return render_template('msg.html', msg = "Plot image not found")
+
 
     plot3 = get_quiz_que_summary()
-    plot3.savefig("./static/images/quiz_summary.jpeg") 
+    if plot3:
+        plot3.savefig("./static/images/quiz_summary.jpeg") 
+    else:
+        return render_template('msg.html', msg = "Plot image not found")
+        
 
-    plt.close()  # Close the figure to free memory
+    plt.close() 
 
     return render_template('admin_summary.html')
 

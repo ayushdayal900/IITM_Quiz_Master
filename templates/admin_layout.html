@@ -13,6 +13,13 @@
    <!-- css link  -->
    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
+   <script>
+      function confirmDelete() {
+          return confirm("Are you sure you want to delete this subject?");
+      }
+   </script>
+
+
 </head>
 <body>
 
@@ -56,8 +63,8 @@
 
    <nav class="navbar">
       <a href="#"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fa-solid fa-book-skull"></i></i><span>Subjects</span></a>
-      <a href="{{ url_for('admin.quiz') }}"><i class="fas fa-graduation-cap"></i><span>Quizes</span></a>
+      <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fa-solid fa-book-skull"></i></i><span>Add Subjects</span></a>
+      <a href="{{ url_for('admin.quiz') }}"><i class="fas fa-graduation-cap"></i><span>Add Quizes</span></a>
       <a href="{{ url_for('admin.admin_summary') }}"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
       <a href="{{ url_for('database_routes.users') }}"><i class="fa-solid fa-user-tie"></i><span>Users</span></a>
       <a href="{{ url_for('general_routes.logout') }}"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>

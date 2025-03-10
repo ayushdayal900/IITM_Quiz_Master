@@ -42,7 +42,7 @@
                     <div class="d-flex">
                       <a href="{{url_for('admin.edit_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
                       <span class="mx-1">/</span>
-                      <a href="{{url_for('admin.delete_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                      <a href="{{url_for('admin.delete_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0" onclick="return confirmDelete()">Delete</a>
                     </div>
                   </td>
                 </tr>
@@ -62,7 +62,7 @@
 
           <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="inline-btn"> + Add Question</a>
           <a href="{{ url_for('admin.edit_quiz', id=quiz.id) }}" class="inline-btn"> Edit Quiz</a>
-          <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="inline-delete-btn"> Delete Quiz</a>
+          <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="inline-delete-btn" onclick="return confirmDelete()"> Delete Quiz</a>
 
         </div>
       </div>

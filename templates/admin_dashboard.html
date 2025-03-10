@@ -44,7 +44,7 @@
                       <div class="d-flex">
                         <a href="{{url_for('admin.edit_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
                         <span class="mx-1">/</span>
-                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Delete</a>
+                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0" onclick="return confirmDelete()">Delete</a>
                       </div>
                     </td>
                   </tr>
@@ -62,7 +62,7 @@
         <div class="card-footer bg-white border-top p-2 text-end">
 
           <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"  class="inline-btn">+ Chapter</a>
-          <a href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="inline-delete-btn" style="margin-left: 160px;" >Delete Subject</a>
+          <a href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="inline-delete-btn" style="margin-left: 160px;" onclick="return confirmDelete()" >Delete Subject</a>
 
         </div>
       </div>
