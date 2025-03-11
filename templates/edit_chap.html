@@ -15,7 +15,7 @@
                         <input type="text" class="ip form-control" name="description" id="description" value="{{chap.description}}">
                     </div>
 
-                    <button type="submit" class="inline-btn">Submit</button>
+                    <button type="submit" class="inline-btn" onclick="return confirmUpdate()">Update</button>
                     <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
                 </div>
             </form>

@@ -1,36 +1,28 @@
-{% extends "user_layout.html" %}   
-<!-- inheritamce -->
-
+{% extends "user_layout.html" %}
 {% block content %}
-<div class="container">
-
+<div style="display: flex;" class="container">
   <div class="row">
-    <div class="col">
-      <div class="card" style="width:33rem;">
-        <div  class="card-body">
-          <h5 class="card-title">User-Score Summary</h5>
-          <h6 class="card-subtitle mb-2 text-muted">User/Score</h6>
-          <div>
-            <img src="./static/images/summary/users_score_summary.jpeg" width="300" height="300">
-          </div>
+    {% for quiz in quizzes %}
+    <div class="col-md-6">
+      <div class="card" style="width:33rem; margin-bottom: 20px;">
+        <div class="card-body">
+          <h5 class="card-title">Performance in Quiz-{{ quiz.id }}</h5>
+          <img src="{{ quiz_image_paths[loop.index0] }}" width="300" height="300" alt="Quiz Performance">
         </div>
       </div>
-    </div>  
+    </div>
+    {% endfor %}
+  </div>
   
-
-  
-    <div class="col">
-      <div class="card" style="width:33rem;">
-        <div  class="card-body">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card" style="width:33rem; margin-bottom: 20px;">
+        <div class="card-body">
           <h5 class="card-title">Subjects Chapters Summary</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Subjects/Chapters</h6>
-          <div>
-            <img src="./static/images/summary/subs_chaps_summary.jpeg" width="300" height="300">
-          </div>
+          <img src="{{ subs_chaps_image_path }}" width="300" height="300" alt="Subjects Chapters Summary">
         </div>
       </div>
-    </div>  
-</div>  
+    </div>
+  </div>
 </div>
-
-{% endblock%}
+{% endblock %}

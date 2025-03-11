@@ -15,8 +15,38 @@
 
    <script>
       function confirmDelete() {
-          return confirm("Are you sure you want to delete this subject?");
+          return confirm("Confirm to DELETE this subject?");
       }
+
+      function confirmUpdate(){
+          return confirm("Confirm to UPDATE this subject?");
+      }
+
+      // timer f()
+
+      function startTimer(durationInSeconds, display) {
+        let timer = durationInSeconds, minutes, seconds;
+        let countdown = setInterval(function () {
+            minutes = Math.floor(timer / 60);
+            seconds = timer % 60;
+
+            // Format time as MM:SS
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            display.textContent = `Time Left: ${minutes}:${seconds}`;
+
+            // Check if time is up
+            if (--timer < 0) {
+                clearInterval(countdown);
+                alert("Time is up! Submitting the answer.");
+                document.getElementById("quiz-form").submit(); // Auto-submit form when time expires
+            }
+        }, 1000);
+    }
+
+
+
+
    </script>
 
 

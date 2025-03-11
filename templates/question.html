@@ -2,6 +2,9 @@
 {% block content %}
 
 
+    
+    
+
     <div class="quiz-container" style="font-size: 30px;">
         <div class="header">
             <!-- <span>QNo. <b>{{ q_no }} / {{ total }}</b></span> -->
@@ -24,6 +27,15 @@
             </form>
         </div>
     </div>
+
+    
+<script>
+    window.onload = function () {
+        const timerDisplay = document.getElementById('timer');
+        startTimer(900, timerDisplay);
+    };
+</script>
+
 
 {% endblock%}
 

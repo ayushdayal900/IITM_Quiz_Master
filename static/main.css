@@ -8,7 +8,7 @@
 
 .input_form{
     border: 1px solid rgb(94, 94, 94);
-    background-color: rgba(196, 196, 196, 0.3);
+    background-color: white;
     width: 600px;
     
 
@@ -126,6 +126,7 @@
 
 .ip{
    font-size: 20px;
+   background-color: rgba(196, 196, 196, 0.3);
 }
 
 
@@ -226,11 +227,10 @@ section{
 }
 
 .inline-btn,
-.inline-option-btn,
 .inline-delete-btn,
 .btn,
-.delete-btn,
-.option-btn{
+.delete-btn
+{
    border-radius: .5rem;
    color:#fff;
    font-size: 1.8rem;
@@ -242,14 +242,13 @@ section{
 }
 
 .btn,
-.delete-btn,
-.option-btn{
+.delete-btn
+{
    display: block;
    width: 100%;
 }
 
 .inline-btn,
-.inline-option-btn,
 .inline-delete-btn{
    display: inline-block;
 }
@@ -259,22 +258,16 @@ section{
    background-color: var(--main-color);
 }
 
-.option-btn,
-.inline-option-btn{
-   background-color:var(--orange);
-}
-
 .delete-btn,
 .inline-delete-btn{
    background-color: var(--red);
 }
 
 .inline-btn:hover,
-.inline-option-btn:hover,
 .inline-delete-btn:hover,
 .btn:hover,
-.delete-btn:hover,
-.option-btn:hover{
+.delete-btn:hover
+{
    background-color: var(--black);
    color: var(--white);
 }
@@ -617,6 +610,7 @@ section{
    border-radius: .9rem;
    background-color: var(--white);
    padding: 2rem;
+   margin: 10px;
 }
 
 .subjects .box-container .box .subject{

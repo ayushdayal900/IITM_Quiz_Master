@@ -16,8 +16,8 @@
         <div class="description">
             <p style="font-size: large;"><b class="orange_text">Description :</b> {{subject.description}}</p>
         </div>
-        <a href="{{ url_for('user.detail_sub', sid = subject.id)}}"><div class="btn">View</div></a>
-    </div>
+        <a href="{{ url_for('user.detail_sub', sid = subject.id)}}"><div class="center inline-btn">View</div></a>
+    </div>  
     {% endfor %}
     </div>
 </section>

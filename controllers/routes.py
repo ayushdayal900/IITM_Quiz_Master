@@ -1,8 +1,10 @@
 from datetime import datetime
+import os
 from flask import Blueprint, abort, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import func
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
-from app import login_manager
+from app import login_manager, bcrypt
 # from models import db
 import matplotlib
 matplotlib.use('Agg')  # Use a non-GUI backend to avoid Tkinter issues
@@ -40,23 +42,26 @@ def home():
 def logout():
 
     logout_user()
-    return redirect(url_for("general_routes.login"))
+    return redirect(url_for("general_routes.home"))
 
 
 
 @gen.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "POST":
+
         email = request.form.get("email")
         pwd   = request.form.get("password")
-        usr = User_Info.query.filter_by(email=email, password=pwd).first()
+
+        usr = User_Info.query.filter_by(email=email).first()
+        pass_match = bcrypt.check_password_hash(usr.password, pwd)
         
         #existed and admin
-        if usr and usr.role==0: 
+        if usr and pass_match and usr.role==0: 
             login_user(usr)
             return redirect(url_for("admin.admin_dashboard"))
         #existed and user
-        elif usr and usr.role==1:
+        elif usr and pass_match and usr.role==1:
             login_user(usr)
             return redirect(url_for("user.user_dashboard"))
         # no one
@@ -83,7 +88,9 @@ def signup():
         if usr:
             return render_template('signup.html',msg="Sorry, this email is already register...!")
         
-        new_usr = User_Info(email=email, password=pwd, full_name=full_name, qualification=quali, dob = dob)
+        hash_pwd = bcrypt.generate_password_hash(pwd).decode("utf-8")
+        new_usr = User_Info(email=email, password=hash_pwd, full_name=full_name, qualification=quali, dob = dob)
+
         db.session.add(new_usr)
         db.session.commit()
         
@@ -196,7 +203,7 @@ def get_chapter_score_summary():
 
     plt.figure(figsize=(10, 6))
     plt.bar(x_names, y_scores, color="green")
-    plt.title("Chapter Maximum Score")
+    plt.title("Chapter & Total-Marks ")
     plt.xlabel("Chapter")
     plt.ylabel("Maximum Score")
     plt.tight_layout()
@@ -607,35 +614,31 @@ def delete_que(id):
 
 # user routes
 
+
 @user.route('/user_dashboard')
 @login_required
 def user_dashboard():
     quizs = Quiz.query.all()
     curr_dt = datetime.now()
-    return render_template('user_dashboard.html',quizs = quizs, curr_dt = curr_dt)
+    return render_template('user_dashboard.html', quizs=quizs, curr_dt=curr_dt)
+
+
+
+
+
 
 @user.route('/view_quiz/<id>')
 @login_required
 def view_quiz(id):
-    quiz = Quiz.query.filter_by(id = id).first()
-    return render_template('quiz_details.html',quiz = quiz)
+    quiz = Quiz.query.filter_by(id=id).first()
+    return render_template('quiz_details.html', quiz=quiz)
 
 
 
 
 
-
-
-
-
-# score routes
-
-
-
-
-
-def get_scores():
-    scores = Score.query.filter_by(user_id=current_user.id).order_by(Score.time_stamp_of_attempt).all()
+def get_scores(user, q):
+    scores = Score.query.filter_by(user_id=user.id, quiz_id=q.id).order_by(Score.time_stamp_of_attempt).all()
     return scores
 
 def get_subs():
@@ -644,25 +647,43 @@ def get_subs():
 
 
 
-def get_users_score_summary():
-    scores = get_scores()
+
+# Function to generate and save user score summary images for each quiz.
+def get_users_score_summary(quizes):
+    # Ensure the summary folder exists
+    image_folder = "./static/images/summary"
+    if not os.path.exists(image_folder):
+        os.makedirs(image_folder)
     
-    # Extract time stamps and corresponding scores
-    x_values = [s.time_stamp_of_attempt for s in scores]
-    y_values = [s.score for s in scores]
+    image_paths = []  # List to hold relative paths of saved images
     
-    plt.figure(figsize=(10, 6))
-    plt.plot(x_values, y_values, marker="o", linestyle="-", color="blue")
-    plt.title("Users Performance Over Time")
-    plt.xlabel("Time")
-    plt.ylabel("Score")
-    
-    # Optional: Format the x-axis if the datetime values are cluttered
-    plt.gcf().autofmt_xdate()
-    
-    plt.grid(True)
-    plt.tight_layout()
-    return plt
+    for i, q in enumerate(quizes):
+        scores = get_scores(current_user, q)
+        
+        # Extract time stamps and corresponding scores
+        x_values = [s.time_stamp_of_attempt.strftime('%Y-%m-%d %H:%M:%S') for s in scores]
+        y_values = [s.score for s in scores]
+        
+        plt.figure(figsize=(10, 6))
+        plt.plot(x_values, y_values, marker="o", linestyle="-", color="blue")
+        plt.title(f"Performance in Quiz-{q.id}")
+        plt.xlabel("Time")
+        plt.ylabel("Score")
+        plt.gcf().autofmt_xdate()
+        plt.grid(True)
+        plt.tight_layout()
+        
+        # Save image with a unique name
+        filename = f"users_score_summary_{i}.jpeg"
+        filepath = os.path.join(image_folder, filename)
+        plt.savefig(filepath)
+        plt.close()  # Close the plot to free memory
+        
+        # Save the relative path (without the dot)
+        image_paths.append(f"static/images/summary/{filename}")
+        
+    return image_paths
+
 
 
 
@@ -671,17 +692,16 @@ def get_users_score_summary():
 def get_subs_chaps_summary():
     subs = get_subs()
     
-    summary = {s.name:len(s.chaps) for s in subs}
+    summary = {s.name: len(s.chaps) for s in subs}
     x_names = list(summary.keys())
     y_scores = list(summary.values())
     
-
-    plt.figure(figsize=(10, 6))  # Set figure size
+    plt.figure(figsize=(10, 6))
     bars = plt.bar(x_names, y_scores, color=["red", "blue", "green", "purple", "orange"])
     plt.title("Subjects Chapters Summary")
     plt.xlabel("Subjects")
     plt.ylabel("Chapters")
-
+    
     for bar in bars:
         height = bar.get_height()
         plt.text(
@@ -693,7 +713,15 @@ def get_subs_chaps_summary():
         )
         
     plt.tight_layout()
-    return plt
+    image_folder = "./static/images/summary"
+    if not os.path.exists(image_folder):
+        os.makedirs(image_folder)
+    filename = "subs_chaps_summary.jpeg"
+    filepath = os.path.join(image_folder, filename)
+    plt.savefig(filepath)
+    plt.close()
+    
+    return f"static/images/summary/{filename}"
 
 
 
@@ -701,16 +729,16 @@ def get_subs_chaps_summary():
 @user.route('/user_summary')
 @login_required
 def user_summary():
+    user = User_Info.query.get(current_user.id)
+    quizes_by_user = user.quizs
 
-    plot1 = get_users_score_summary()
-    plot1.savefig("./static/images/summary/users_score_summary.jpeg")
-
-    plot2 = get_subs_chaps_summary()
-    plot2.savefig("./static/images/summary/subs_chaps_summary.jpeg")
+    quiz_image_paths = get_users_score_summary(quizes_by_user)
+    subs_chaps_image_path = get_subs_chaps_summary()
     
-    plt.close()  
-    return render_template('user_summary.html')
-
+    return render_template('user_summary.html',
+                           quizzes=quizes_by_user,
+                           quiz_image_paths=quiz_image_paths,
+                           subs_chaps_image_path=subs_chaps_image_path)
 
 
 
@@ -811,8 +839,14 @@ def quiz_summary(quiz_id):
         db.session.commit()
     
     session.pop('current_score_id', None)
+    max_score = db.session.query(func.max(Score.score)).filter(Score.quiz_id == quiz_id).scalar()
+    quiz = Quiz.query.filter_by(id = quiz_id).first()
+
+    print(max_score)
+    quiz.quiz_maxm_score = max_score
+    db.session.commit()
     
-    return render_template("summary.html", current_quiz_score=score_entry.score, overall_max_score=current_user.user_score)
+    return render_template("summary.html", current_quiz_score=score_entry.score, overall_max_score=max_score)
 
 
 

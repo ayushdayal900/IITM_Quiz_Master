@@ -19,3 +19,9 @@ Every quiz has a timer (timer is optional)
 Each quiz score is recorded
 The earlier quiz attempts are shown
 Shows the summary charts
+
+
+
+timer
+b crypt..................done
+

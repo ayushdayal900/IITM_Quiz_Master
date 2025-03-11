@@ -102,7 +102,7 @@ class Quiz(db.Model):
     score = db.Column(db.Integer, nullable=False)
     is_attempted = db.Column(db.Boolean, default=False)
     
-    usr_score = db.Column(db.Integer, default=0)
+    quiz_maxm_score = db.Column(db.Integer, default=0)
     questions = db.relationship("Question", cascade="all,delete",backref="quiz",lazy=True)
 
 
