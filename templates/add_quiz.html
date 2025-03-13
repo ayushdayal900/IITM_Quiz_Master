@@ -6,10 +6,20 @@
 <form action="{{ url_for('admin.add_quiz') }}" method="POST">
     <div class="input_form">
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="chapter_id" class="form-label">Chapter ID</label>
             <input type="number" class="ip form-control" name="chapter_id" id="chapter_id" placeholder="Enter Chapter ID" required>
+        </div> -->
+
+        <div class="mb-3">
+            <label for="chapter_id">Choose Chapter:</label>
+            <select class="drop_down" name="chapter_id" id="chapter_id">
+                {% for chap in chaps %}
+                    <option value="{{ chap.id }}">ID:{{ chap.id }} & Name: {{ chap.name }}</option>
+                {% endfor %}
+            </select>
         </div>
+
 
         <div class="mb-3">
             <label for="datetime" class="form-label">Date - Time</label>

@@ -25,7 +25,13 @@
 
         <div>
             <!-- <a href="{{ url_for('user.view_quiz', id=quiz.id) }}" class="btn"> View </a> -->
-            <a href="{{ url_for('user.get_question', quiz_id=quiz.id, q_no=1) }}" class="inline-btn">Start Quiz</a>
+            <a href="{{ url_for('user.get_question', quiz_id=quiz.id, q_no=1) }}" 
+                class="inline-btn" 
+                >
+                Start Quiz
+            </a>
+            <!-- onclick="startTimer('{{ quiz.duration }}')" -->
+
         </div>
     </div>
         

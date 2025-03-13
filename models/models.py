@@ -50,7 +50,6 @@ class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
     description = db.Column(db.String, nullable=False)
-    # no_of_ques= db.Column(db.Integer, default=0)
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     
     ques = db.relationship("Question", cascade="all,delete", backref="chapter", lazy=True)

@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from flask import Blueprint, abort, redirect, render_template, request, session, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
@@ -59,15 +59,26 @@ def login():
         #existed and admin
         if usr and pass_match and usr.role==0: 
             login_user(usr)
+            flash("Welcome Admin!","success")
             return redirect(url_for("admin.admin_dashboard"))
         #existed and user
         elif usr and pass_match and usr.role==1:
             login_user(usr)
+            flash("Login Successful, Welcome!","success")
             return redirect(url_for("user.user_dashboard"))
         # no one
         else:
+            flash("Invalid Email Or Password.!","danger")
             return render_template('login.html',msg="Invalid User Credentials.")
     return render_template('login.html',msg="")
+
+
+
+
+@gen.route('/test_flash')
+def test_flash():
+    flash("This is a test flash message!", "info")
+    return render_template("login.html")  # ✅ Render directly
 
 
 
@@ -86,15 +97,16 @@ def signup():
         usr = User_Info.query.filter_by(email=email).first()
         # email already exists
         if usr:
-            return render_template('signup.html',msg="Sorry, this email is already register...!")
+            flash("Sorry, this email is already register...!", "danger")
+            return render_template('signup.html')
         
         hash_pwd = bcrypt.generate_password_hash(pwd).decode("utf-8")
         new_usr = User_Info(email=email, password=hash_pwd, full_name=full_name, qualification=quali, dob = dob)
 
         db.session.add(new_usr)
         db.session.commit()
-        
-        return render_template("login.html",msg="Registration Successful. Try Login Now.")
+        flash("Registration Successful. Try Login Now.", "success")
+        return render_template("login.html")
     return render_template('signup.html')
 
 
@@ -332,13 +344,16 @@ def add_quiz():
 
         score = request.form.get("score")
 
+        # print(chapter_id)
         quiz = Quiz(user_id = current_user.id, chapter_id=chapter_id,date_time=date_time,duration=duration,score=score)
         
         db.session.add(quiz)
         db.session.commit()
 
         return redirect(url_for("admin.quiz"))
-    return render_template('add_quiz.html')
+    
+    chaps = Chapter.query.all()
+    return render_template('add_quiz.html', chaps = chaps)
 
 
 
@@ -648,7 +663,7 @@ def get_subs():
 
 
 
-# Function to generate and save user score summary images for each quiz.
+
 def get_users_score_summary(quizes):
     # Ensure the summary folder exists
     image_folder = "./static/images/summary"
@@ -769,7 +784,6 @@ def get_question(quiz_id, q_no):
     if not questions:
         abort(404)
     
-    # Start new attempt when accessing the first question
     if q_no == 1:
         new_score = Score(
             user_id=current_user.id,
@@ -827,25 +841,39 @@ def quiz_summary(quiz_id):
     current_score_id = session.get('current_score_id')
     if not current_score_id:
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
-    
+
     score_entry = Score.query.get(current_score_id)
     if not score_entry:
         session.pop('current_score_id', None)
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
+
     
-    # Optionally update global maximum
     if score_entry.score > current_user.user_score:
         current_user.user_score = score_entry.score
         db.session.commit()
-    
+
     session.pop('current_score_id', None)
-    max_score = db.session.query(func.max(Score.score)).filter(Score.quiz_id == quiz_id).scalar()
-    quiz = Quiz.query.filter_by(id = quiz_id).first()
+
+    
+    quiz = Quiz.query.filter_by(id=quiz_id).first()
+    if not quiz:
+        # flash("Quiz not found.", "danger")
+        return redirect(url_for("user.dashboard")) 
+
+    
+    max_score_raw = db.session.query(func.max(Score.score)).filter(Score.quiz_id == quiz_id).scalar() or 0
+    print(max_score_raw)
+    
+    if quiz.score > 0:
+        max_score = int((max_score_raw * 100) / (len(quiz.questions) * 10))
+    else:
+        max_score = 0  
 
     print(max_score)
-    quiz.quiz_maxm_score = max_score
+
+    quiz.quiz_maxm_score = int((quiz.score * max_score) /100)
     db.session.commit()
-    
+
     return render_template("summary.html", current_quiz_score=score_entry.score, overall_max_score=max_score)
 
 
