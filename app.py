@@ -7,7 +7,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SECRET_KEY'] = "1234567890!@#$%^&*()"
 
 login_manager = LoginManager(app)
