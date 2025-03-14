@@ -8,7 +8,7 @@ bcrypt = Bcrypt(app)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
-app.config['SECRET_KEY'] = bcrypt.generate_password_hash("supersecretkey").decode('utf-8')
+app.config['SECRET_KEY'] = "1234567890!@#$%^&*()"
 
 login_manager = LoginManager(app)
 login_manager.login_view = "general_routes.login"

@@ -98,7 +98,8 @@ class Quiz(db.Model):
 
     date_time = db.Column(db.DateTime, nullable=False)
     duration = db.Column(db.Time, nullable=False)
-    score = db.Column(db.Integer, nullable=False)
+    #total score
+    score = db.Column(db.Integer, nullable=False)   
     is_attempted = db.Column(db.Boolean, default=False)
     
     quiz_maxm_score = db.Column(db.Integer, default=0)

@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt  # Now import pyplot
 
 
 
+
+
+
 # general routes
 gen = Blueprint('general_routes', __name__)  
 data = Blueprint('database_routes', __name__)  
@@ -23,6 +26,12 @@ user = Blueprint('user', __name__)
 
 
 
+
+
+# @gen.route('/test_flash')
+# def test_flash():
+#     flash("This is a test flash message!", "danger")
+#     return redirect(url_for("general_routes.login"))
 
 
 
@@ -54,31 +63,36 @@ def login():
         pwd   = request.form.get("password")
 
         usr = User_Info.query.filter_by(email=email).first()
-        pass_match = bcrypt.check_password_hash(usr.password, pwd)
+        if usr:
+            pass_match = bcrypt.check_password_hash(usr.password, pwd)
+        else:
+            flash("Invalid Email Or Password.!","danger")
+            return redirect(url_for("general_routes.login"))
         
-        #existed and admin
-        if usr and pass_match and usr.role==0: 
-            login_user(usr)
-            flash("Welcome Admin!","success")
-            return redirect(url_for("admin.admin_dashboard"))
-        #existed and user
-        elif usr and pass_match and usr.role==1:
-            login_user(usr)
-            flash("Login Successful, Welcome!","success")
-            return redirect(url_for("user.user_dashboard"))
+        #existed 
+        if usr and pass_match : 
+            # admin
+            if  usr.role==0:
+                login_user(usr)
+                flash("Welcome Admin!","success")
+                return redirect(url_for("admin.admin_dashboard"))
+            # user
+            else :
+                login_user(usr)
+                flash("Login Successful, Welcome!","success")
+                return redirect(url_for("user.user_dashboard"))
         # no one
         else:
             flash("Invalid Email Or Password.!","danger")
-            return render_template('login.html',msg="Invalid User Credentials.")
-    return render_template('login.html',msg="")
+            return redirect(url_for("general_routes.login"))
+    return render_template('login.html')
 
 
 
 
-@gen.route('/test_flash')
-def test_flash():
-    flash("This is a test flash message!", "info")
-    return render_template("login.html")  # ✅ Render directly
+
+
+
 
 
 
@@ -98,7 +112,7 @@ def signup():
         # email already exists
         if usr:
             flash("Sorry, this email is already register...!", "danger")
-            return render_template('signup.html')
+            return redirect(url_for("general_routes.signup"))
         
         hash_pwd = bcrypt.generate_password_hash(pwd).decode("utf-8")
         new_usr = User_Info(email=email, password=hash_pwd, full_name=full_name, qualification=quali, dob = dob)
@@ -106,7 +120,7 @@ def signup():
         db.session.add(new_usr)
         db.session.commit()
         flash("Registration Successful. Try Login Now.", "success")
-        return render_template("login.html")
+        return redirect(url_for("general_routes.login"))
     return render_template('signup.html')
 
 
@@ -171,6 +185,36 @@ def get_users_quiz_summary():
     return plt
 
 
+
+
+
+def get_subject_score_summary():
+    quizes = get_quizes()
+    summary = {q.chapter.subject.name: q.quiz_maxm_score for q in quizes}
+    
+    x_names = list(summary.keys())
+    y_scores = list(summary.values())
+
+    plt.figure(figsize=(10, 6))  # Set figure size
+    bars = plt.bar(x_names, y_scores, color=["red", "blue", "green", "purple", "orange"])
+    plt.title("Subject Score Summary")
+    plt.xlabel("Subject")
+    plt.ylabel("Score")
+    # plt.xticks(rotation=45)  # Rotate labels for readability
+
+    # Annotate each bar with its score
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(
+            bar.get_x() + bar.get_width() / 2,
+            height,
+            f'{int(height)}',
+            ha='center',
+            va='bottom'
+        )
+        
+    plt.tight_layout()
+    return plt
 
 
 
@@ -241,22 +285,30 @@ def admin_summary():
     if(plot1):
         plot1.savefig("./static/images/users_summary.jpeg")
     else:
-        return render_template('msg.html', msg = "Plot image not found")
+        return render_template('msg.html')
+        # return render_template('msg.html', msg = "Plot image not found")
 
     plot2 = get_chapter_score_summary()
     if plot2:
         plot2.savefig("./static/images/chap_score_summary.jpeg")
     else:
-        return render_template('msg.html', msg = "Plot image not found")
+        return render_template('msg.html')
+        # return render_template('msg.html', msg = "Plot image not found")
 
 
     plot3 = get_quiz_que_summary()
     if plot3:
         plot3.savefig("./static/images/quiz_summary.jpeg") 
     else:
-        return render_template('msg.html', msg = "Plot image not found")
-        
-
+        return render_template('msg.html')
+        # return render_template('msg.html', msg = "Plot image not found")
+    
+    plot4 = get_subject_score_summary()
+    if plot4:
+        plot4.savefig("./static/images/subject_score_summary.jpeg") 
+    else:
+        return render_template('msg.html')
+        # return render_template('msg.html', msg = "Plot image not found")
     plt.close() 
 
     return render_template('admin_summary.html')
@@ -681,7 +733,7 @@ def get_users_score_summary(quizes):
         
         plt.figure(figsize=(10, 6))
         plt.plot(x_values, y_values, marker="o", linestyle="-", color="blue")
-        plt.title(f"Performance in Quiz-{q.id}")
+        plt.title(f"Performance in Quiz-{q.id} Chap : {q.chapter.name}")
         plt.xlabel("Time")
         plt.ylabel("Score")
         plt.gcf().autofmt_xdate()
@@ -857,11 +909,11 @@ def quiz_summary(quiz_id):
     
     quiz = Quiz.query.filter_by(id=quiz_id).first()
     if not quiz:
-        # flash("Quiz not found.", "danger")
+        flash("Quiz not found.", "danger")
         return redirect(url_for("user.dashboard")) 
 
     
-    max_score_raw = db.session.query(func.max(Score.score)).filter(Score.quiz_id == quiz_id).scalar() or 0
+    max_score_raw = db.session.query(func.max(Score.score)).filter(Score.quiz_id == quiz_id, Score.user_id == current_user.id).scalar() or 0
     print(max_score_raw)
     
     if quiz.score > 0:
