@@ -43,7 +43,7 @@
                       <div class="d-flex">
                         <a href="{{url_for('admin.edit_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
                         <span class="mx-1">/</span>
-                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0" onclick="return confirmDelete()">Delete</a>
+                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="inline-delete-btn" onclick="return confirmDelete()">Delete</a>
                       </div>
                     </td>
                   </tr>

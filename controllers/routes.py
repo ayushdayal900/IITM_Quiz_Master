@@ -366,12 +366,13 @@ def add_chapter(sid):
     if request.method == "POST":
         name = request.form.get('name')
         description = request.form.get('description')
-        
-        chap = Chapter(name = name, description = description, subject_id = sid)
 
-        db.session.add(chap)
-        db.session.commit()
-
+        if name:    
+            chap = Chapter(name = name, description = description, subject_id = sid)
+            db.session.add(chap)
+            db.session.commit()
+        else:
+            flash("Please Enter chap name","danger")
         return redirect(url_for("admin.admin_dashboard"))
     return render_template('add_chapter.html',sub = sub)
 
@@ -442,12 +443,12 @@ def add_question(cid,qid):
         option4 = request.form.get('option4')
         correct_option = request.form.get('correct_option')
 
-        
-        que = Question(name = name, description = description, chapter_id = chapter_id, quiz_id=quiz_id, option1=option1, option2=option2, option3=option3, option4=option4, correct_option=correct_option)
-
-        db.session.add(que)
-        db.session.commit()
-
+        if name and option1 and option2 and option3 and option4 and correct_option:
+            que = Question(name = name, description = description, chapter_id = chapter_id, quiz_id=quiz_id, option1=option1, option2=option2, option3=option3, option4=option4, correct_option=correct_option)
+            db.session.add(que)
+            db.session.commit()
+        else:
+            flash("Please specify the questions", "danger")
         return redirect(url_for("admin.quiz"))
     return render_template('add_question.html',cid = cid,qid = qid,chap = chap, quiz = quiz)
 
@@ -861,6 +862,9 @@ def get_question(quiz_id, q_no):
 @login_required
 def submit_answer(quiz_id):
 
+    selected_option = -1
+    is_correct = False
+
     current_score_id = session.get('current_score_id')
     if not current_score_id:
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
@@ -870,10 +874,16 @@ def submit_answer(quiz_id):
         session.pop('current_score_id', None)
         return redirect(url_for('user.get_question', quiz_id=quiz_id, q_no=1))
     
-    q_no = int(request.form["q_no"])
-    selected_option = int(request.form["selected_option"])
-    question = Question.query.get(request.form["question_id"])
-    is_correct = (question.correct_option == selected_option)
+    
+    if request.form.get("q_no"):
+        q_no = int(request.form.get("q_no"))
+
+    if request.form.get("selected_option"):
+        selected_option = int(request.form.get("selected_option"))
+        
+    question = Question.query.get(request.form.get("question_id"))
+    if question:
+        is_correct = (question.correct_option == selected_option)
     
     if is_correct:
         score_entry.score += 10
@@ -926,7 +936,10 @@ def quiz_summary(quiz_id):
     quiz.quiz_maxm_score = int((quiz.score * max_score) /100)
     db.session.commit()
 
-    return render_template("summary.html", current_quiz_score=score_entry.score, overall_max_score=max_score)
+    # \n Your Score for thhis Quiz :{score_entry.score}
+    flash(f"Your Max Score for thhis Quiz : {max_score} ","info")
+    return redirect(url_for("user.quizes"))
+    # return render_template("question.html", current_quiz_score=score_entry.score, overall_max_score=max_score)
 
 
 

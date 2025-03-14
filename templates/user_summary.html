@@ -1,28 +1,76 @@
 {% extends "user_layout.html" %}
 {% block content %}
-<div style="display: flex;" class="container">
+<div class="container-fluid py-5">
   <div class="row">
     {% for quiz in quizzes %}
-    <div class="col-md-6">
-      <div class="card" style="width:33rem; margin-bottom: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Performance in Quiz-{{ quiz.id }}</h5>
-          <img src="{{ quiz_image_paths[loop.index0] }}" width="300" height="300" alt="Quiz Performance">
+      <div class="col-sm-12 col-md-6 col-lg-4" style="padding: 20px;">
+        <div class="card shadow h-100" style="border: 2px solid #dee2e6;">
+          <div class="card-body text-center" style="padding: 20px;">
+            <h5 class="card-title mb-4">Performance in Quiz-{{ quiz.id }}</h5>
+            <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+              <img 
+                src="{{ quiz_image_paths[loop.index0] }}" 
+                class="img-fluid" 
+                alt="Quiz Performance" 
+                style="max-width: 100%; height: auto; display: block; margin: 0 auto;"
+              >
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      {% if loop.index is divisibleby 3 and not loop.last %}
+        </div><div class="row">
+      {% endif %}
     {% endfor %}
   </div>
   
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card" style="width:33rem; margin-bottom: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Subjects Chapters Summary</h5>
-          <img src="{{ subs_chaps_image_path }}" width="300" height="300" alt="Subjects Chapters Summary">
+  <div class="row mt-5">
+    <div class="col-sm-12 col-md-6 col-lg-4" style="padding: 20px;">
+      <div class="card shadow h-100" style="border: 2px solid #dee2e6;">
+        <div class="card-body text-center" style="padding: 20px;">
+          <h5 class="card-title mb-4">Subjects Chapters Summary</h5>
+          <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+            <img 
+              src="{{ subs_chaps_image_path }}" 
+              class="img-fluid" 
+              alt="Subjects Chapters Summary" 
+              style="max-width: 100%; height: auto; display: block; margin: 0 auto;"
+            >
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  /* Force every card to have its own space */
+  .col-sm-12, .col-md-6, .col-lg-4 {
+    float: left;
+    clear: none;
+  }
+  
+  /* Force images to respect boundaries */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+  
+  /* Ensure each card has breathing room */
+  .card {
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    margin-bottom: 30px !important;
+  }
+  
+  /* Add clearfix to force proper row heights */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>
 {% endblock %}

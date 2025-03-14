@@ -101,6 +101,47 @@
 }
 
 
+.flash-message {
+   font-size: 2rem; /* Adjust text size */
+   padding: 20px; /* More spacing */
+}
+
+
+/* Override inline style on any element with a style attribute */
+.container[style] {
+   display: block !important;
+ }
+ 
+
+
+
+
+ 
+
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -252,10 +293,10 @@ section{
 {
    border-radius: .5rem;
    color:#fff;
-   font-size: 1.8rem;
+   font-size: 2rem;
    cursor: pointer;
    text-transform: capitalize;
-   padding:1rem 3rem;
+   padding:0.5rem 1rem;
    text-align: center;
    margin-top: 1rem;
 }
