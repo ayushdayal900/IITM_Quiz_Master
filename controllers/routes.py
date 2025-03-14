@@ -7,9 +7,10 @@ from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
 from app import login_manager, bcrypt
 # from models import db
 import matplotlib
-matplotlib.use('Agg')  # Use a non-GUI backend to avoid Tkinter issues
+# Use a non-GUI backend to avoid Tkinter issues
+matplotlib.use('Agg')  
 
-import matplotlib.pyplot as plt  # Now import pyplot
+import matplotlib.pyplot as plt  
 
 
 
@@ -168,9 +169,7 @@ def get_users_quiz_summary():
     plt.title("Users Performance")
     plt.xlabel("Users")
     plt.ylabel("Score")
-    # plt.xticks(rotation=45)  # Rotate labels for readability
-
-    # Annotate each bar with its score
+    
     for bar in bars:
         height = bar.get_height()
         plt.text(
@@ -195,14 +194,12 @@ def get_subject_score_summary():
     x_names = list(summary.keys())
     y_scores = list(summary.values())
 
-    plt.figure(figsize=(10, 6))  # Set figure size
+    plt.figure(figsize=(10, 6))  
     bars = plt.bar(x_names, y_scores, color=["red", "blue", "green", "purple", "orange"])
     plt.title("Subject Score Summary")
     plt.xlabel("Subject")
     plt.ylabel("Score")
-    # plt.xticks(rotation=45)  # Rotate labels for readability
 
-    # Annotate each bar with its score
     for bar in bars:
         height = bar.get_height()
         plt.text(
@@ -718,12 +715,13 @@ def get_subs():
 
 
 def get_users_score_summary(quizes):
-    # Ensure the summary folder exists
+    # check folder exists or not exists
     image_folder = "./static/images/summary"
     if not os.path.exists(image_folder):
         os.makedirs(image_folder)
     
-    image_paths = []  # List to hold relative paths of saved images
+    # List to hold relative paths of saved images
+    image_paths = []  
     
     for i, q in enumerate(quizes):
         scores = get_scores(current_user, q)
@@ -745,7 +743,7 @@ def get_users_score_summary(quizes):
         filename = f"users_score_summary_{i}.jpeg"
         filepath = os.path.join(image_folder, filename)
         plt.savefig(filepath)
-        plt.close()  # Close the plot to free memory
+        plt.close()  
         
         # Save the relative path (without the dot)
         image_paths.append(f"static/images/summary/{filename}")

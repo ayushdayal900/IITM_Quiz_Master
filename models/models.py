@@ -100,7 +100,7 @@ class Quiz(db.Model):
     duration = db.Column(db.Time, nullable=False)
     #total score
     score = db.Column(db.Integer, nullable=False)   
-    is_attempted = db.Column(db.Boolean, default=False)
+    # is_attempted = db.Column(db.Boolean, default=False)
     
     quiz_maxm_score = db.Column(db.Integer, default=0)
     questions = db.relationship("Question", cascade="all,delete",backref="quiz",lazy=True)
@@ -120,4 +120,5 @@ class Score(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user_info.id'), nullable=False)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
     time_stamp_of_attempt = db.Column(db.DateTime, nullable=False)
-    score = db.Column(db.Integer, nullable=False)  # Added to store attempt score
+    # currect attempt score
+    score = db.Column(db.Integer, nullable=False)  

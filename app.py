@@ -2,9 +2,11 @@ from datetime import datetime
 from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from controllers.Resource_api import *
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -21,7 +23,7 @@ def load_user(user_id):
 
 
 def init_blueprints():
-    # Import inside function to avoid circular import
+    # avoid circular import
     from controllers.routes import gen, data, admin, user  
 
     app.register_blueprint(gen)
@@ -48,8 +50,9 @@ def initialize_database():
             print("Admin user already exists.")
 
 
-db.init_app(app)  # Initialize database
+db.init_app(app)  
 if __name__ == '__main__':
     initialize_database()
     init_blueprints()  
+    api.init_app(app)
     app.run(debug=True)
