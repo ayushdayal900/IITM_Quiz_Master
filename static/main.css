@@ -58,6 +58,19 @@
     background-position: center;
     height: 70vh;
     width: 100%;    
+   }
+   
+   
+.bg_img{
+   
+   background-image: url('./images/index_image.jpg');
+   background-repeat: repeat;
+   background-size: cover;
+   background-position: center;
+   /* margin-top: 10px; */
+   height: 90vh;
+   width: 160vh;
+
 }
 
 .card{
@@ -668,7 +681,10 @@ section{
 
 
 
-
+.blur-text {
+   font-size: 24px;
+   filter: blur(2px);
+ }
 
 
 
