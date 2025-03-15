@@ -923,7 +923,7 @@ def quiz_summary(quiz_id):
     db.session.commit()
 
     # \n Your Score for thhis Quiz :{score_entry.score}
-    flash(f"Your Max Score for thhis Quiz : {max_score} ","info")
+    flash(f"Your Max Score in % : {max_score} ","info")
     return redirect(url_for("user.quizes"))
     # return render_template("question.html", current_quiz_score=score_entry.score, overall_max_score=max_score)
 
