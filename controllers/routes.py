@@ -56,73 +56,61 @@ def logout():
 
 
 
+from flask import session  # Ensure session is imported
+
 @gen.route('/login', methods=["GET","POST"])
 def login():
     if request.method == "POST":
-
         email = request.form.get("email")
-        pwd   = request.form.get("password")
+        pwd = request.form.get("password")
 
         usr = User_Info.query.filter_by(email=email).first()
-        if usr:
-            pass_match = bcrypt.check_password_hash(usr.password, pwd)
-        else:
-            flash("Invalid Email Or Password.!","danger")
-            return redirect(url_for("general_routes.login"))
-        
-        #existed 
-        if usr and pass_match : 
-            # admin
-            if  usr.role==0:
-                login_user(usr)
-                flash("Welcome Admin!","success")
+
+        if usr and bcrypt.check_password_hash(usr.password, pwd): 
+            login_user(usr)
+
+            # Admin Login
+            if usr.role == 0:
+                flash("Welcome Admin!", "success")
                 return redirect(url_for("admin.admin_dashboard"))
-            # user
-            else :
-                login_user(usr)
-                flash("Login Successful, Welcome!","success")
+            # User Login
+            else:
+                flash("Login Successful, Welcome!", "success")
                 return redirect(url_for("user.user_dashboard"))
-        # no one
-        else:
-            flash("Invalid Email Or Password.!","danger")
-            return redirect(url_for("general_routes.login"))
+        
+        # If user does not exist or password is incorrect
+        flash("Invalid Email Or Password.!", "danger")
+        return redirect(url_for("general_routes.login"))
+
     return render_template('login.html')
-
-
-
-
-
-
-
-
-
 
 
 @gen.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-
         email = request.form.get("email")
-        pwd   = request.form.get("password")
-        full_name   = request.form.get("full_name")
-        quali   = request.form.get("qualification")
-        dob   = request.form.get("date")
+        pwd = request.form.get("password")
+        full_name = request.form.get("full_name")
+        quali = request.form.get("qualification")
+        dob = request.form.get("date")
         dob = datetime.strptime(dob, "%Y-%m-%d").date()
 
         usr = User_Info.query.filter_by(email=email).first()
-        # email already exists
         if usr:
-            flash("Sorry, this email is already register...!", "danger")
+            flash("Sorry, this email is already registered!", "danger")
             return redirect(url_for("general_routes.signup"))
         
         hash_pwd = bcrypt.generate_password_hash(pwd).decode("utf-8")
-        new_usr = User_Info(email=email, password=hash_pwd, full_name=full_name, qualification=quali, dob = dob)
+        new_usr = User_Info(email=email, password=hash_pwd, full_name=full_name, qualification=quali, dob=dob)
 
         db.session.add(new_usr)
         db.session.commit()
-        flash("Registration Successful. Try Login Now.", "success")
-        return redirect(url_for("general_routes.login"))
+
+        # flash("Registration Successful. Try Login Now.", "success")
+        return redirect(url_for("general_routes.login"))  # Removed _external & _scheme
+
     return render_template('signup.html')
+
 
 
 
