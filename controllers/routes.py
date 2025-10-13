@@ -82,7 +82,8 @@ def login():
         
         # If user does not exist or password is incorrect
         flash("Invalid Email Or Password.!", "danger")
-        return redirect(url_for("general_routes.login"))
+        return redirect(url_for("gen.login"))
+
 
     return render_template('login.html')
 
