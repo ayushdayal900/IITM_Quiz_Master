@@ -20,7 +20,9 @@ login_manager.login_view = "general_routes.login"
 def load_user(user_id):
     return User_Info.query.get(int(user_id))
 
-
+@app.route('/')
+def home():
+    return render_template('index.html') 
 
 def init_blueprints():
     # avoid circular import
