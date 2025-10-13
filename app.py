@@ -3,7 +3,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from controllers.Resource_api import *
-
+import os
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
@@ -51,8 +51,12 @@ def initialize_database():
 
 
 db.init_app(app)  
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Render sets the PORT env variable
+    app.run(host="0.0.0.0", port=port, debug=True)
+
     initialize_database()
     init_blueprints()  
     api.init_app(app)
-    app.run(debug=True)
