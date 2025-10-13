@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from controllers.Resource_api import *
