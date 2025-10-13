@@ -5,6 +5,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
 from app import login_manager, bcrypt
+from general_routes import gen  # your Blueprint
 # from models import db
 import matplotlib
 # Use a non-GUI backend to avoid Tkinter issues
@@ -35,6 +36,7 @@ user = Blueprint('user', __name__)
 #     return redirect(url_for("general_routes.login"))
 
 
+app.register_blueprint(gen, url_prefix='/')  # or any prefix you want
 
 
 
