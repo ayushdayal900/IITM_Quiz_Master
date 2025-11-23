@@ -1,0 +1,77 @@
+{% extends "admin_layout.html" %}
+{% block content %}
+<div class="container-fluid py-4">
+  
+  <h1 class="heading center">Quizes</h1>
+  
+  <a href="{{ url_for('admin.add_quiz') }}" class="inline-btn"> + Add Quizes</a>
+
+  <div style="margin: 20px; font-size: 20px;" class="row">
+    {% for quiz in quizes %}
+    <div class="subjects">
+      <div class="box-container">
+        <div class="box">
+          <div class="heading1 card-header bg-white border-bottom py-3">
+            <a href="{{ url_for('admin.quiz_details', qzid=quiz.id) }}">
+              <h5 style="color: rgb(231, 153, 44);" class="imp_title card-title text-center fw-bold mb-0">
+                Quiz({{quiz.id}}): {{ quiz.chapter.name }} <i class="fa-solid fa-pen-to-square"></i>
+              </h5>
+            </a>
+            <h5><strong>T.Score : {{quiz.score}}</strong> </h5>
+          </div>
+          
+          <div class="card-body p-0">
+            {% if quiz.questions %}
+            <div class="table-responsive">
+              <table class="table table-hover table-sm mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="text-primary">Q. Id</th>
+                    <th class="text-primary">Q. Name</th>
+                    <th class="text-primary">Description</th>
+                    <th class="text-primary">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for que in quiz.questions %}
+                  <tr>
+                    <td>{{ que.id }}</td>
+                    <td>{{ que.name }}</td>
+                    <td>{{ que.description }}</td>
+                    <td>
+                      <div class="d-flex">
+                        <a href="{{url_for('admin.edit_que', id = que.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
+                        <span class="mx-1">/</span>
+                        <a href="{{url_for('admin.delete_que', id = que.id)}}" class="inline-delete-btn" onclick="return confirmDelete()">Delete</a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="p-3 text-center text-muted">
+              <i class="fas fa-info-circle me-2"></i> No questions added yet.
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="card-footer bg-white border-top p-2 text-end">
+            <a href="{{ url_for('admin.add_question', qid=quiz.id, cid=quiz.chapter.id) }}" class="inline-btn"> + Add Question</a>
+            <a href="{{ url_for('admin.edit_quiz', id=quiz.id) }}" class="inline-btn"> Edit Quiz</a>
+            <a href="{{ url_for('admin.delete_quiz', id = quiz.id) }}" class="inline-delete-btn" onclick="return confirmDelete()"> Delete Quiz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function confirmDelete() {
+  return confirm("Are you sure you want to delete this item?");
+}
+</script>
+{% endblock %}

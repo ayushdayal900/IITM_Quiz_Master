@@ -1,0 +1,30 @@
+{% extends "user_layout.html" %}  
+{% block content %}
+<section class="subjects"> 
+<h1 class="center heading">Subjects</h1>
+
+<div class="box-container">
+{% for subject in subs %}
+    <div class="box">
+        <div class="subject">
+            <div class="center">
+                <h3 > Subject: {{subject.name}}</h3>
+                <h2 class="orange_text ">No of Chaps : {{subject.chaps|length}}</h2>
+            </div>
+        </div>
+        
+        <div class="description">
+            <p style="font-size: large;"><b class="orange_text">Description :</b> {{subject.description}}</p>
+        </div>
+        <a href="{{ url_for('user.detail_sub', sid = subject.id)}}"><div class="center inline-btn">View</div></a>
+    </div>  
+    {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+
+

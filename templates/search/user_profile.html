@@ -1,0 +1,28 @@
+{% extends 'user_layout.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="orange_text mb-4">User Information</h2>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Qualification</th>
+                <th>Role</th>
+                <th>Date of Birth</th>
+            </tr>
+        </thead>
+        <tbody class="white_text">
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.full_name }}</td>
+                <td>{{ user.qualification }}</td>
+                <td>{{ "Admin" if user.role == 0 else "User" }}</td>
+                <td>{{ user.dob.strftime('%Y-%m-%d') }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

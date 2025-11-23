@@ -1,0 +1,22 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritamce -->
+{% block content %}
+            <div class="heading center"><h1>Edit Chapter</h1></div>
+            <form action="/edit_chap/{{chap.id}}" method="POST">
+                <div class="input_form">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Chapter Name</label>
+                        <input type="text" class="ip form-control" name="name" id="name" value="{{chap.name}}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="ip form-control" name="description" id="description" value="{{chap.description}}">
+                    </div>
+
+                    <button type="submit" class="inline-btn" onclick="return confirmUpdate()">Update</button>
+                    <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
+                </div>
+            </form>
+{% endblock%}   

@@ -1,0 +1,23 @@
+{% extends "admin_layout.html" %}   
+<!-- inheritamce -->
+{% block content %}
+
+<h1 class="heading center">Add Subject</h1>
+            <form action="/add_subject" method="POST">
+                <div class="input_form">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label"><p class="orange_text">Subject Name</p></label>
+                        <input type="text" class="ip form-control" name="name" id="name" placeholder="Subject Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="ip form-control" name="description" id="description" placeholder="Description">
+                    </div>
+
+                    <button type="submit" class="inline-btn"> + Add</button>
+                    <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
+                </div>
+            </form>
+{% endblock%}   

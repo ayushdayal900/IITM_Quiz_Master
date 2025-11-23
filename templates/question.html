@@ -1,0 +1,39 @@
+{% extends "user_layout.html" %}
+{% block content %}
+
+
+
+    <div class="quiz-container" style="font-size: 30px;">
+        <div class="header">
+            <!-- <span>QNo. <b>{{ q_no }} / {{ total }}</b></span> -->
+            <span>QNo. <b>{{ q_no }} / {{ total }}</b></span>
+            <span id="timer">{{question.quiz.duration}}</span>
+        </div>
+
+        <div class="question-box">
+            <h2>{{ question.name }}</h2>
+            <form id="quiz-form" action="{{ url_for('user.submit_answer', quiz_id=question.quiz_id) }}" method="POST">
+                <input type="hidden" name="q_no" value="{{ q_no }}">
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+
+                <label><input type="radio" name="selected_option" value="1"> {{ question.option1 }}</label><br>
+                <label><input type="radio" name="selected_option" value="2"> {{ question.option2 }}</label><br>
+                <label><input type="radio" name="selected_option" value="3"> {{ question.option3 }}</label><br>
+                <label><input type="radio" name="selected_option" value="4"> {{ question.option4 }}</label><br>
+
+                <button class="inline-btn" type="submit">Save and Next</button>
+            </form>
+        </div>
+    </div>
+
+    
+<script>
+    window.onload = function () {
+        const timerDisplay = document.getElementById('timer');
+        startTimer(900, timerDisplay);
+    };
+</script>
+
+
+{% endblock%}
+
