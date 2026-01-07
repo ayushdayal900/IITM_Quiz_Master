@@ -1,46 +1,48 @@
-{% extends "admin_layout.html" %}   
-<!-- inheritance -->
+{% extends "admin_layout.html" %}
 {% block content %}
 
-<h1 class="center heading">Add Quiz</h1>
-<form action="{{ url_for('admin.add_quiz') }}" method="POST">
-    <div class="input_form">
+<section class="dashboard">
+    <div class="box" style="max-width: 500px; margin: 2rem auto; padding: 2rem;">
+        <h1 class="heading" style="text-align: center; border-bottom: none; margin-bottom: 2rem;">Add New Quiz</h1>
 
-        <!-- <div class="mb-3">
-            <label for="chapter_id" class="form-label">Chapter ID</label>
-            <input type="number" class="ip form-control" name="chapter_id" id="chapter_id" placeholder="Enter Chapter ID" required>
-        </div> -->
+        <form action="{{ url_for('admin.add_quiz') }}" method="POST">
 
-        <div class="mb-3">
-            <label for="chapter_id">Choose Chapter:</label>
-            <select class="drop_down" name="chapter_id" id="chapter_id">
-                {% for chap in chaps %}
-                    <option value="{{ chap.id }}">ID:{{ chap.id }} & Name: {{ chap.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="chapter_id">Select Chapter</label>
+                <select name="chapter_id" id="chapter_id" class="form-control" required>
+                    <option value="" disabled selected>-- Choose a Chapter --</option>
+                    {% for chap in chaps %}
+                    <option value="{{ chap.id }}">{{ chap.name }} (ID: {{ chap.id }})</option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label for="datetime">Date & Time</label>
+                <input type="datetime-local" name="datetime" id="datetime" class="form-control" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="datetime" class="form-label">Date - Time</label>
-            <input type="datetime-local" class="ip form-control" name="datetime" id="datetime" required>
-        </div>
+            <div class="form-group">
+                <label for="duration">Duration</label>
+                <input type="text" name="duration" id="duration" class="form-control" placeholder="e.g. 00:30:00"
+                    required>
+            </div>
 
-        <div class="mb-3">
-            <label for="duration" class="form-label">Duration</label>
-            <input type="time" class="ip form-control" name="duration" id="duration" placeholder="Enter Duration" required>
-        </div>
+            <div class="form-group">
+                <label for="score">Total Score</label>
+                <input type="number" name="score" id="score" class="form-control" placeholder="100" required>
+            </div>
 
-        <div class="mb-3">
-            <label for="score" class="form-label">Score</label>
-            <input type="number" class="ip form-control" name="score" id="score" placeholder="Enter Score" required>
-        </div>
+            <div class="flex-btn" style="margin-top: 2rem;">
+                <button type="submit" class="btn inline-btn" style="width: 100%;">Create Quiz</button>
+            </div>
 
-        <button type="submit" class="inline-btn">Add</button>
-        <a href="{{url_for('admin.admin_dashboard')}}" type="button" class="inline-delete-btn" style="margin-left: 330px;">Cancle</a>
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="{{url_for('admin.quiz')}}" style="color: var(--text-light);">Cancel</a>
+            </div>
 
+        </form>
     </div>
-</form>
-</div>
+</section>
 
 {% endblock %}

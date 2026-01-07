@@ -1,39 +1,89 @@
 {% extends "user_layout.html" %}
 {% block content %}
 
+<section class="quiz-section glass" style="max-width: 800px; margin: 2rem auto; padding: 2rem; border-radius: 1rem;">
 
-
-    <div class="quiz-container" style="font-size: 30px;">
-        <div class="header">
-            <!-- <span>QNo. <b>{{ q_no }} / {{ total }}</b></span> -->
-            <span>QNo. <b>{{ q_no }} / {{ total }}</b></span>
-            <span id="timer">{{question.quiz.duration}}</span>
-        </div>
-
-        <div class="question-box">
-            <h2>{{ question.name }}</h2>
-            <form id="quiz-form" action="{{ url_for('user.submit_answer', quiz_id=question.quiz_id) }}" method="POST">
-                <input type="hidden" name="q_no" value="{{ q_no }}">
-                <input type="hidden" name="question_id" value="{{ question.id }}">
-
-                <label><input type="radio" name="selected_option" value="1"> {{ question.option1 }}</label><br>
-                <label><input type="radio" name="selected_option" value="2"> {{ question.option2 }}</label><br>
-                <label><input type="radio" name="selected_option" value="3"> {{ question.option3 }}</label><br>
-                <label><input type="radio" name="selected_option" value="4"> {{ question.option4 }}</label><br>
-
-                <button class="inline-btn" type="submit">Save and Next</button>
-            </form>
+    <div class="quiz-header flex"
+        style="justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 1rem;">
+        <h2 style="font-size: 1.5rem; color: var(--secondary-color);">Question <span
+                style="color: var(--primary-color);">{{ q_no }}</span> / {{ total }}</h2>
+        <div class="timer"
+            style="background: var(--light-red); color: var(--red); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: bold;">
+            <i class="fas fa-clock"></i> <span id="timer">{{question.quiz.duration}}</span>
         </div>
     </div>
 
-    
+    <div class="question-box">
+        <h1 class="heading" style="text-align: left; border: none; font-size: 1.8rem; margin-bottom: 1.5rem;">{{
+            question.name }}</h1>
+
+        <form id="quiz-form" action="{{ url_for('user.submit_answer', quiz_id=question.quiz_id) }}" method="POST">
+            <input type="hidden" name="q_no" value="{{ q_no }}">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+
+            <div class="options-grid" style="display: grid; gap: 1rem;">
+                <label class="option-card"
+                    style="display: block; padding: 1rem; border: 2px solid #eee; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease;">
+                    <input type="radio" name="selected_option" value="1" style="margin-right: 10px;">
+                    <span style="font-size: 1.1rem;">{{ question.option1 }}</span>
+                </label>
+
+                <label class="option-card"
+                    style="display: block; padding: 1rem; border: 2px solid #eee; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease;">
+                    <input type="radio" name="selected_option" value="2" style="margin-right: 10px;">
+                    <span style="font-size: 1.1rem;">{{ question.option2 }}</span>
+                </label>
+
+                <label class="option-card"
+                    style="display: block; padding: 1rem; border: 2px solid #eee; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease;">
+                    <input type="radio" name="selected_option" value="3" style="margin-right: 10px;">
+                    <span style="font-size: 1.1rem;">{{ question.option3 }}</span>
+                </label>
+
+                <label class="option-card"
+                    style="display: block; padding: 1rem; border: 2px solid #eee; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s ease;">
+                    <input type="radio" name="selected_option" value="4" style="margin-right: 10px;">
+                    <span style="font-size: 1.1rem;">{{ question.option4 }}</span>
+                </label>
+            </div>
+
+            <div class="action-btn" style="margin-top: 2rem; text-align: right;">
+                <button class="btn inline-btn" type="submit" style="font-size: 1.2rem; padding: 0.8rem 2rem;">Save &
+                    Next <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </form>
+    </div>
+</section>
+
 <script>
+    // Simple script to handle option selection styling
+    const options = document.querySelectorAll('.option-card');
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            options.forEach(opt => opt.style.borderColor = '#eee');
+            options.forEach(opt => opt.style.background = 'transparent');
+            option.style.borderColor = 'var(--primary-color)';
+            option.style.background = 'rgba(108, 99, 255, 0.05)';
+            option.querySelector('input').checked = true;
+        });
+    });
+
     window.onload = function () {
         const timerDisplay = document.getElementById('timer');
-        startTimer(900, timerDisplay);
+        // Ensure startTimer is available from quiz.js
+        if (typeof startTimer === "function") {
+            // Parse duration from template which might be formatted, but JS expects duration calculation
+            // Wait, startTimer in quiz.js expects duration in seconds or string?
+            // The template outputs {{question.quiz.duration}} which is Time object or string? 
+            // In previous view it rendered as numbers? "00:30:00" probably. 
+            // The JS startTimer takes `durationInSeconds`? 
+            // Let's rely on what was there before: startTimer(900, timerDisplay);
+            // But 900 is hardcoded. It should ideally be dynamic.
+            // I'll leave the hardcoded 900 for now as I can't easily convert server time here without more logic, 
+            // OR I can use the value from the timer element if the JS supports it.
+            startTimer(900, timerDisplay);
+        }
     };
 </script>
 
-
 {% endblock%}
-

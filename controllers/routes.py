@@ -1,11 +1,11 @@
 from datetime import datetime
+from functools import wraps
 import os
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func
 from models.models import Quiz, Score, db, User_Info, Subject, Chapter, Question
-from app import login_manager, bcrypt
-# from models import db
+from extensions import login_manager, bcrypt
 import matplotlib
 # Use a non-GUI backend to avoid Tkinter issues
 matplotlib.use('Agg')  
@@ -127,8 +127,18 @@ def signup():
 
 
 # admin routes
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.role != 0:
+            flash("You do not have permission to access admin pages.", "danger")
+            return redirect(url_for('general_routes.login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @admin.route('/admin_dashboard')
 @login_required
+@admin_required
 def admin_dashboard():
     subs = Subject.query.all()
     return render_template('admin_dashboard.html', subs = subs)
@@ -255,7 +265,7 @@ def get_chapter_score_summary():
 
 @admin.route('/admin_summary')
 @login_required
-
+@admin_required
 def admin_summary():
 
 
@@ -306,6 +316,7 @@ def admin_summary():
 
 @admin.route('/quiz')
 @login_required
+@admin_required
 def quiz():
     quizes = Quiz.query.all() 
     return render_template('quiz.html',quizes = quizes)
@@ -317,6 +328,7 @@ def quiz():
 
 @admin.route('/quiz_details/<qzid>')
 @login_required
+@admin_required
 def quiz_details(qzid):
     quiz = Quiz.query.filter_by(id=qzid).first() 
     return render_template('quiz_details.html',quiz = quiz)
@@ -327,6 +339,7 @@ def quiz_details(qzid):
 
 @admin.route('/add_subject', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_subject():
     if request.method == "POST":
         name = request.form.get('name')
@@ -346,6 +359,7 @@ def add_subject():
 
 @admin.route('/add_chapter/<sid>', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_chapter(sid):
     sub = Subject.query.filter_by(id=sid).first()
     if request.method == "POST":
@@ -365,6 +379,7 @@ def add_chapter(sid):
 
 @admin.route('/add_quiz', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_quiz():
     if request.method == "POST":
         # user_id = request.form.get("user_id")  
@@ -409,6 +424,7 @@ def add_quiz():
 
 @admin.route('/add_question/<cid>/<qid>', methods=["POST", "GET"])
 @login_required
+@admin_required
 def add_question(cid,qid):
 
     chap = Chapter.query.filter_by(id=cid).first()
@@ -462,6 +478,7 @@ def search_by_quiz_id(q):
 
 @admin.route("/search", methods=['POST', 'GET'])
 @login_required
+@admin_required
 def search():
     if request.method == "POST":
         search_txt = request.form.get('search_txt')
@@ -496,6 +513,7 @@ def get_sub(id):
 
 @admin.route("/edit_sub/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def edit_sub(id):
     s = get_sub(id)
     # print(s)
@@ -513,6 +531,7 @@ def edit_sub(id):
 
 @admin.route("/delete_sub/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def delete_sub(id):
     s = get_sub(id)
     db.session.delete(s)
@@ -530,6 +549,7 @@ def get_chap(id):
 
 @admin.route("/edit_chap/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def edit_chap(id):
     c = get_chap(id)
     
@@ -551,6 +571,7 @@ def edit_chap(id):
 
 @admin.route("/delete_chap/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def delete_chap(id):
     c = get_chap(id)
     db.session.delete(c)
@@ -568,6 +589,7 @@ def get_quiz(id):
 
 @admin.route("/edit_quiz/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def edit_quiz(id):
     q = get_quiz(id)
     # print(s)
@@ -596,6 +618,7 @@ def edit_quiz(id):
 
 @admin.route("/delete_quiz/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def delete_quiz(id):
     q = get_quiz(id)
     db.session.delete(q)
@@ -612,6 +635,7 @@ def get_que(id):
 
 @admin.route("/edit_que/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def edit_que(id):
     q = get_que(id)
     # print(s)
@@ -640,6 +664,7 @@ def edit_que(id):
 
 @admin.route("/delete_que/<id>", methods=['GET','POST'])
 @login_required
+@admin_required
 def delete_que(id):
     q = get_que(id)
 
@@ -1003,9 +1028,9 @@ def detail_sub(sid):
 
 
 
-# database routes
 @data.route("/users")
 @login_required
+@admin_required
 def users():
     user = User_Info.query.all()
     curr_dt = datetime.now()

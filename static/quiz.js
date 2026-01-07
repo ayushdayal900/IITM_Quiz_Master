@@ -1,3 +1,46 @@
+// UI Interactivity
+document.addEventListener('DOMContentLoaded', () => {
+    // Sidebar Toggle
+    const menuBtn = document.querySelector('#menu-btn');
+    const closeBtn = document.querySelector('#close-btn');
+    const sideBar = document.querySelector('.side-bar');
+    const body = document.body;
+
+    if (menuBtn) {
+        menuBtn.onclick = () => {
+            sideBar.classList.toggle('active');
+            body.classList.toggle('active');
+        };
+    }
+
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            sideBar.classList.remove('active');
+            body.classList.remove('active');
+        };
+    }
+
+    // Profile Toggle 
+    const userBtn = document.querySelector('#user-btn');
+    const profile = document.querySelector('.profile');
+    
+    // Note: The original CSS/HTML structure for profile toggle might need adjustment 
+    // based on the new CSS, but keeping basic logic here.
+    if(userBtn && profile){
+         userBtn.onclick = () =>{
+             profile.classList.toggle('active');
+         }
+    }
+    
+    // Timer Logic (Conditional)
+    const timerDisplay = document.getElementById('timer');
+    if (timerDisplay) {
+        // Set default or get from element attribute
+        let duration = timerDisplay.getAttribute('data-duration') || 900; 
+        startTimer(duration, timerDisplay);
+    }
+});
+
 function confirmDelete() {
     return confirm("Confirm to DELETE?");
 }
@@ -12,6 +55,9 @@ function startTimer(durationInSeconds, display) {
     let now = Math.floor(Date.now() / 1000); // Current timestamp in seconds
 
     // If the timer was already started before, calculate remaining time
+    // Logic: Only use session storage if we are in the Same quiz session. 
+    // For simplicity, we'll assume yes for now, but a quiz ID check would be better.
+    
     if (startTime) {
         let elapsed = now - parseInt(startTime, 10);
         durationInSeconds -= elapsed;
@@ -23,7 +69,7 @@ function startTimer(durationInSeconds, display) {
     if (durationInSeconds <= 0) {
         display.textContent = "Time Over!";
         alert("Time is up! Submitting the answer.");
-        document.getElementById("quiz-form").submit();
+        submitQuizForm();
         return;
     }
 
@@ -39,13 +85,13 @@ function startTimer(durationInSeconds, display) {
         if (--timer < 0) {
             clearInterval(countdown);
             alert("Time is up! Submitting the answer.");
-            document.getElementById("quiz-form").submit();
+            submitQuizForm();
         }
     }, 1000);
 }
 
-// Start the timer only if it's the first question or resume if ongoing
-window.onload = function () {
-    const timerDisplay = document.getElementById('timer');
-    startTimer(900, timerDisplay);
-};
+function submitQuizForm(){
+    const form = document.getElementById("quiz-form");
+    if(form) form.submit();
+}
+

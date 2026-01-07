@@ -1,38 +1,53 @@
 {% extends "index.html" %}
 {% block content %}
-<div>
-    <div class="err_msg">{{msg}}</div>
-    <div class="heading center"><h1>Sign Up</h1></div>
+<div class="signup-container glass">
+    <div class="heading center" style="border: none; margin-bottom: 2rem;">
+        <h1 style="color: var(--primary-color);">Create Account</h1>
+        <p style="color: var(--text-light); font-size: 1rem;">Join Quiz Master today</p>
+    </div>
+
+    {% if msg %}
+    <div class="alert alert-danger">{{ msg }}</div>
+    {% endif %}
+
     <form action="/signup" method="POST">
-        <div class="input_form">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
+        </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="ip form-control" name="email" id="email" placeholder="iitm@study.iitm.ac.in">
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Enter your full name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Create a password"
+                required>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="qualification">Qualification</label>
+                <input type="text" name="qualification" id="qualification" class="form-control"
+                    placeholder="e.g. 10th, 12th" required>
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="ip form-control" name="password" id="password" placeholder="password">
+            <div class="col-md-6">
+                <label for="date">Date of Birth</label>
+                <input type="date" name="date" id="date" class="form-control" required>
             </div>
+        </div>
 
-            <div class="mb-3">
-                <label for="full_name" class="form-label">Full Name</label>
-                <input type="text" class="ip form-control" name="full_name" id="full_name" placeholder="Jhon Doe">
-            </div>
+        <div class="form-group text-center mt-4">
+            <button type="submit" class="btn btn-lg w-100">Sign Up</button>
+        </div>
 
-            <div class="mb-3">
-                <label for="qualification" class="form-label">Qualification</label>
-                <input type="text" class="ip form-control" name="qualification" id="qualification" placeholder="10">
-            </div>
-
-            <div class="mb-3">
-                <label for="date" class="form-label">Date Of Birth</label>
-                <input type="date" class="ip form-control" name="date" id="date" placeholder="yyyy-mm-dd">
-            </div>
-
-            <div class="center"><button type="submit" class="btn btn-primary">Submit</button></div>
-            <div class="center" style="color: rgb(255, 166, 0); font-size: large;">Already have and Account?<a href="/login">Login</a></div>
+        <div class="text-center mt-3">
+            <p style="color: var(--text-color);">Already have an account? <a
+                    href="{{ url_for('general_routes.login') }}"
+                    style="color: var(--primary-color); font-weight: 600;">Login</a></p>
         </div>
     </form>
 </div>

@@ -1,95 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Gen Layout</title>
+   <title>Quiz Master</title>
 
-   <!-- font awesome cdn link  -->
+   <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+   <!-- Font Awesome -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
-   <!-- bootstrap link  -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-   
-   <!-- css link  -->
+   <!-- Bootstrap -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+   <!-- Custom CSS -->
    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
-   <!-- Bootstrap JS and jQuery (needed for alerts to dismiss) -->
+   <!-- Scripts -->
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-   
 </head>
-<body>
-   
+
+<body class="light">
+
    <header class="header">
-      
-      <!-- logo -->
-      <img src="{{ url_for('static', filename='images/logo_qm.jpeg') }}" alt="logo for image" style="height: 100px; width: 160px;"></a>
-      
-      <section class="flex">
-         
-      <!-- search bar -->
-      <form action="#" method="post" class="search-form" >
-         <input type="text" name="search_box" placeholder="search..." maxlength="100">
-         <!-- <button type="submit" class="fas fa-search" disabled></button> -->
-      </form>
-      
-      <div style="margin-left: 150px">
-        <a href="{{url_for('general_routes.login')}}"><button type="button" class=" inline-btn " style="margin-top: 20px; margin-left: 10px; ">Login</button></a>
-        <a href="{{url_for('general_routes.signup')}}"><button type="button" class="inline-btn" style="margin-top: 20px; margin-left: 30px; ">Signup</button></a>
-    </div>
+      <div class="flex">
+         <a href="{{ url_for('general_routes.home') }}" class="logo">
+            <img src="{{ url_for('static', filename='images/logo_qm.jpeg') }}" alt="Quiz Master">
+         </a>
 
-   </section>
-   
-</header>   
+         <nav class="navbar">
+            <a href="{{ url_for('general_routes.login') }}" class="inline-btn">Login</a>
+            <a href="{{ url_for('general_routes.signup') }}" class="inline-btn"
+               style="background-color: var(--secondary-color);">Sign Up</a>
+         </nav>
+      </div>
+   </header>
 
-<div class="side-bar">
-   
-   <div id="close-btn">
-      <i class="fas fa-times"></i>
+   <div class="bg_img"
+      style="min-height: calc(100vh - 80px); display: flex; align-items: center; justify-content: center; background: url('{{ url_for('static', filename='images/index_image.jpg') }}') no-repeat center center/cover;">
+
+      <div class="container">
+         {% with messages = get_flashed_messages(with_categories=true) %}
+         {% if messages %}
+         {% for category, message in messages %}
+         <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         {% endfor %}
+         {% endif %}
+         {% endwith %}
+
+         {% block content %}
+         <div class="hero-text text-center text-white glass p-5">
+            <h1 class="display-3 font-weight-bold mb-4" style="color: var(--primary-color);">Welcome to Quiz Master</h1>
+            <p class="lead mb-4" style="color: var(--secondary-color);">Test your knowledge and challenge yourself with
+               our interactive quizzes.</p>
+            <a href="{{ url_for('general_routes.login') }}" class="btn btn-lg">Get Started</a>
+         </div>
+         {% endblock %}
+      </div>
+
    </div>
-   
-   <div class="profile">
-      
-      <img src="{{ url_for('static', filename='images/profile_pic.jpg') }}" class="image" alt="">
-      <h3 class="name">{{current_user.email}}</h3>
-
-      {% if current_user.is_authenticated %}
-      <p class="role">student</p>
-      {% else %}
-      {% endif %}
-      
-      <!-- this is remaining -->
-      <!-- <a href="#" class="btn">view profile</a>    -->
-   </div>
-   
-   <nav class="blur-text navbar">
-      <a href="#"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="#"><i class="fas fa-question"></i><span>About</span></a>
-      <a href="#"><i class="fa-solid fa-book-skull"></i></i><span>Subjects</span></a>
-      <a href="#"><i class="fas fa-graduation-cap"></i><span>Quizes</span></a>
-      <a href="#"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
-      <a href="#"><i class="fa-solid fa-user-tie"></i><span>Admin</span></a>
-      <a href="#"><i class="fas fa-headset"></i><span>Contact us</span></a>
-      <a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
-   </nav>
-</div>
-
-
-
-<div class="bg_img">
-    {% block content %}
-
-    {% endblock %}
-    
-</div>
-
-
-
-
-
 
 </body>
+
 </html>

@@ -1,85 +1,69 @@
-{% extends "admin_layout.html" %}  
+{% extends "admin_layout.html" %}
 {% block content %}
 
+<section class="dashboard">
+  <div class="flex-btn" style="justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1 class="heading" style="margin-bottom: 0; border: none;">Manage Subjects</h1>
+    <a href="{{ url_for('admin.add_subject') }}" class="btn inline-btn"><i class="fas fa-plus"></i> Add Subject</a>
+  </div>
 
-<div class="container-fluid py-4">
-  
-    <h1 class="heading center">Subjects</h1>
-      <!-- <a href="{{ url_for('admin.add_subject') }}" class="btn btn-warning rounded-square"> + </a> -->
-
-      <a href="{{ url_for('admin.add_subject') }}" class="inline-btn"> + Add Subject</a>
-
-  
-
-  
-  <div style=" margin: 20px; font-size: 20px;" class="row">
+  <div class="grid-container">
     {% for sub in subs %}
-    <div class="subjects"></section>
-    <div class="box-container">
-      <div class=" box">
-        <div class="heading1 card-header bg-white border-bottom py-3">
-          <a href="./edit_sub/{{sub.id}}"> <h5 style="color: rgb(231, 153, 44);" class=" imp_title card-title text-center fw-bold mb-0">{{ sub.name }} <i class="fa-solid fa-pen-to-square"></i></h5></a>
-        </div>
-        
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover table-sm mb-0">
-              <thead class="bg-light">
-                <tr>
-                  <th class="text-primary ">Chap Id.</th>
-                  <th class="text-primary ">Chap name</th>
-                  <th class="text-primary ">No of Q. </th>
-                  <th class="text-primary ">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% if sub.chaps %}
-                  {% for chap in sub.chaps %}
-                  <tr>
-                    <td>{{ chap.id }}</td>
-                    <td>{{ chap.name }}</td>
-                    <td>{{ chap.ques|length }}</td>
-                    <td>
-                      <div class="d-flex">
-                        <a href="{{url_for('admin.edit_chap', id = chap.id)}}" class="btn btn-sm btn-link text-decoration-none p-0">Edit</a>
-                        <span class="mx-1">/</span>
-                        <a href="{{url_for('admin.delete_chap', id = chap.id)}}" class="inline-delete-btn" onclick="return confirmDelete()">Delete</a>
-                      </div>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                {% else %}
-                  <tr>
-                    <td colspan="3" class="text-center py-3 text-muted">No chapters available</td>
-                  </tr>
-                {% endif %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        <div class="card-footer bg-white border-top p-2 text-end">
+    <div class="box">
+      <div class="flex"
+        style="justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+        <h3 style="color: var(--secondary-color);">{{ sub.name }}</h3>
+        <a href="./edit_sub/{{sub.id}}" style="color: var(--main-color);"><i class="fa-solid fa-pen-to-square"></i></a>
+      </div>
 
-          <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}"  class="inline-btn">+ Chapter</a>
-          <a href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="inline-delete-btn" style="margin-left: 160px;" onclick="return confirmDelete()" >Delete Subject</a>
+      <div class="chapters-list" style="margin-bottom: 1.5rem;">
+        {% if sub.chaps %}
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <thead>
+            <tr style="color: var(--text-light); font-size: 0.9rem;">
+              <th style="padding: 5px;">ID</th>
+              <th style="padding: 5px;">Chapter</th>
+              <th style="padding: 5px;">Ques</th>
+              <th style="padding: 5px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for chap in sub.chaps %}
+            <tr style="border-bottom: 1px solid #f9f9f9;">
+              <td style="padding: 8px 5px;">{{ chap.id }}</td>
+              <td style="padding: 8px 5px;">{{ chap.name }}</td>
+              <td style="padding: 8px 5px;">{{ chap.ques|length }}</td>
+              <td style="padding: 8px 5px;">
+                <a href="{{url_for('admin.edit_chap', id = chap.id)}}"
+                  style="color: var(--main-color); margin-right: 5px;"><i class="fas fa-edit"></i></a>
+                <a href="{{url_for('admin.delete_chap', id = chap.id)}}" style="color: var(--accent-color);"
+                  onclick="return confirmDelete()"><i class="fas fa-trash"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p style="color: var(--text-light); text-align: center; font-style: italic;">No chapters added yet.</p>
+        {% endif %}
+      </div>
 
-        </div>
+      <div class="flex-btn" style="gap: 10px;">
+        <a href="{{ url_for('admin.add_chapter', sid=sub.id) }}" class="inline-btn"
+          style="flex: 1; font-size: 0.9rem;">+ Chapter</a>
+        <a href="{{ url_for('admin.delete_sub', id=sub.id) }}" class="inline-delete-btn"
+          style="flex: 1; font-size: 0.9rem;" onclick="return confirmDelete()">Delete Subject</a>
       </div>
     </div>
-  </div>
     {% endfor %}
   </div>
-</div>
+
+  {% if not subs %}
+  <div class="box" style="text-align: center;">
+    <p>No subjects found. Start by adding one!</p>
+  </div>
+  {% endif %}
+
+</section>
+
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-

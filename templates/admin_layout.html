@@ -1,97 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>User Layout</title>
+   <title>Quiz Master - Admin</title>
 
-   <!-- font awesome cdn link  -->
+   <!-- Google Fonts -->
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+   <!-- Font Awesome -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-   <!-- bootstrap link  -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-   <!-- css link  -->
+
+   <!-- Bootstrap -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+   <!-- Custom CSS -->
    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-   <!-- js file link -->
-   <script src="quiz.js"></script>
 
-
+   <!-- Scripts -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
 
-<header class="header">
-   
-   <!-- logo -->
-   <img src="{{ url_for('static', filename='images/logo_qm.jpeg') }}" alt="logo for image" style="height: 100px; width: 160px;"></a>
+<body class="light">
 
-   <section class="flex">
+   <header class="header">
+      <section class="flex">
+         <a href="{{ url_for('admin.admin_dashboard') }}" class="logo">
+            <img src="{{ url_for('static', filename='images/logo_qm.jpeg') }}" alt="Quiz Master Logo">
+         </a>
 
-      <!-- search bar -->
-      <form action="{{ url_for('admin.search') }}" method="POST" class="search-form">
-         <input type="text" name="search_txt" placeholder="search..." maxlength="100">
-         <button type="submit" class="fas fa-search"></button>
-      </form>
+         <form action="{{ url_for('admin.search') }}" method="POST" class="search-form">
+            <input type="text" name="search_txt" placeholder="Search admin data..." maxlength="100">
+            <button type="submit" class="fas fa-search"></button>
+         </form>
 
-      <!-- icons -->
-      <div class="icons" style="margin-left: 100px ;">
-         <div id="menu-btn" class="fas fa-bars"></div>
-         <div id="user-btn" class="fas fa-user"></div>
-         <div id="toggle-btn" class="fas fa-sun"></div>
+         <div class="icons">
+            <div id="menu-btn" class="fas fa-bars"></div>
+            <div id="user-btn" class="fas fa-user"></div>
+         </div>
+      </section>
+   </header>
+
+   <div class="side-bar">
+      <div id="close-btn">
+         <i class="fas fa-times"></i>
       </div>
 
-   </section>
+      <div class="profile">
+         <img src="{{ url_for('static', filename='images/admin_pic.jpg') }}" class="image" alt="Admin Profile">
+         <h3 class="name">{{current_user.email}}</h3>
+         <p class="role">Administrator</p>
+         <a href="#" class="btn shadow-sm">View Profile</a>
+      </div>
 
-</header>   
-
-<div class="side-bar">
-
-   <div id="close-btn">
-      <i class="fas fa-times"></i>
+      <nav class="navbar">
+         <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fas fa-home"></i><span>Dashboard</span></a>
+         <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fa-solid fa-book"></i><span>Subjects</span></a>
+         <a href="{{ url_for('admin.quiz') }}"><i class="fas fa-clipboard-list"></i><span>Quizzes</span></a>
+         <a href="{{ url_for('admin.admin_summary') }}"><i class="fa-solid fa-chart-pie"></i><span>Analytics</span></a>
+         <a href="{{ url_for('database_routes.users') }}"><i class="fa-solid fa-users"></i><span>Users</span></a>
+         <a href="{{ url_for('general_routes.logout') }}"><i
+               class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+      </nav>
    </div>
 
-   <div class="profile">
-      <img src="{{ url_for('static', filename='images/admin_pic.jpg') }}" class="image" alt="">
-      <h3 class="name">{{current_user.email}}</h3>
-      <p class="role">Admin</p>
-      <!-- this is remaining -->
-      <a href="#" class="btn">view profile</a>   
-   </div>
+   <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+         {{ message }}
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
 
-   <nav class="navbar">
-      <a href="#"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="{{ url_for('admin.admin_dashboard') }}"><i class="fa-solid fa-book-skull"></i></i><span>Add Subjects</span></a>
-      <a href="{{ url_for('admin.quiz') }}"><i class="fas fa-graduation-cap"></i><span>Add Quizes</span></a>
-      <a href="{{ url_for('admin.admin_summary') }}"><i class="fa-solid fa-rectangle-list"></i><span>Summary</span></a>
-      <a href="{{ url_for('database_routes.users') }}"><i class="fa-solid fa-user-tie"></i><span>Users</span></a>
-      <a href="{{ url_for('general_routes.logout') }}"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
-   </nav>
+      {% block content %}
+      {% endblock %}
+   </main>
 
-</div>
+   <footer class="footer">
+      &copy; copyright @ 2025 by <span>Quiz Master</span> | all rights reserved!
+   </footer>
 
+   <!-- Custom JS -->
+   <script src="{{ url_for('static', filename='quiz.js') }}"></script>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-    {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show flash-message p-4 fs-4" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endfor %}
-{% endif %}
-{% endwith %}
-
-
-{% block content %}
-
-{% endblock %}
-
-
-
-<!--  js link  -->
-<script src="{{ url_for('static', filename='quiz.js') }}" defer></script>
-
-   
 </body>
+
 </html>

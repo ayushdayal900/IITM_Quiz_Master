@@ -1,32 +1,42 @@
-{% extends "admin_layout.html" %}  
+{% extends "admin_layout.html" %}
 {% block content %}
-<section class="subjects"> 
-<h1 class="center heading">Users</h1>
 
-<div class="box-container">
-{% for user in users %}
-    <div class="box">
-        <div class="subject">
-            <div class="center">
-                <h3><b> User Mail: {{user.email}}<hr/></b></h3>
+<section class="dashboard">
+    <div class="heading" style="border: none; margin-bottom: 2rem;">
+        <h1>Registered Users</h1>
+        <p style="color: var(--text-light);">Manage and view all registered students.</p>
+    </div>
+
+    <div class="grid-container">
+        {% for user in users %}
+        <div class="box">
+            <div class="flex"
+                style="justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <h3 style="color: var(--secondary-color);">{{ user.full_name }}</h3>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">{{ user.email }}</p>
+                </div>
+                <div style="background: var(--light-bg); padding: 5px 10px; border-radius: 5px;">
+                    <span style="font-weight: bold; color: var(--primary-color);">ID: {{ user.id }}</span>
+                </div>
+            </div>
+
+            <div class="user-details" style="display: grid; gap: 0.5rem; font-size: 0.95rem;">
+                <p><strong>Qualification:</strong> {{ user.qualification }}</p>
+                <p><strong>DOB:</strong> {{ user.dob }}</p>
+                <p><strong>Total Score:</strong> <span style="color: var(--accent-color); font-weight: bold;">{{
+                        user.user_score }}</span></p>
             </div>
         </div>
-        
-        <div class="description">
-            <p style="font-size: large;"><b class="orange_text">Id :</b> {{user.id}}</p>
-            <p style="font-size: large;"><b class="orange_text">Full Name :</b> {{user.full_name}}</p>
-            <p style="font-size: large;"><b class="orange_text">Qualification :</b> {{user.qualification}}</p>
-            <p style="font-size: large;"><b class="orange_text">DOB :</b> {{user.dob}}</p>
-            <p style="font-size: large;"><b class="orange_text">Score :</b> {{user.user_score}}</p>
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
+    {% if not users %}
+    <div class="box" style="text-align: center;">
+        <p>No registered users found.</p>
     </div>
+    {% endif %}
+
 </section>
 
 {% endblock %}
-
-
-
-
-
